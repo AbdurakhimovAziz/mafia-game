@@ -1,2 +1,19 @@
 <p>home works!</p>
 <a routerLink="auth/login"> Login </a>
+
+
+<section>
+  <ul>
+    <li *ngFor="let msg of messages | async">
+      {{msg}}
+    </li>
+  </ul>
+</section>
+
+<div class="max-w-lg mt-auto p-10">
+  <form (ngSubmit)="sendMsg()" [formGroup]="messageGr">
+    <label for="message">Enter a message: </label>
+    <input class="w-full p-5 border border-gray-300" type="text" id="message" formControlName="message">
+    <button type="submit" class="btn mt-5">Send</button>
+  </form>
+</div>

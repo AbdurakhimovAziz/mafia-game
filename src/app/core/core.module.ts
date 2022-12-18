@@ -1,12 +1,12 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { ElectronService } from './services/electron/electron.service';
+import { SocketService, ElectronService } from './services';
 
 @NgModule({
   declarations: [PageNotFoundComponent],
   imports: [CommonModule],
-  providers: [ElectronService]
+  providers: [ElectronService, SocketService]
 })
 export class CoreModule {
   constructor(@Optional() @SkipSelf() core: CoreModule) {

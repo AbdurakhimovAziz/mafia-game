@@ -1,27 +1,29 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const url = require('url');
 const path = require('path');
+const net = require('net');
 
 let mainWindow;
 
+const loadUrl = () => {
+  mainWindow.loadURL(
+    url.format({
+      pathname: path.join(__dirname, `/dist/mafia-game/index.html`),
+      protocol: 'file:',
+      slashes: true
+    })
+  );
+};
+
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,
+    width: 1000,
     height: 800,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      preload: path.join(__dirname, 'preload.js')
     }
   });
-
-  const loadUrl = () => {
-    mainWindow.loadURL(
-      url.format({
-        pathname: path.join(__dirname, `/dist/mafia-game/index.html`),
-        protocol: 'file:',
-        slashes: true
-      })
-    );
-  };
 
   loadUrl();
 
@@ -33,6 +35,11 @@ function createWindow() {
   });
 
   mainWindow.webContents.on('did-fail-load', loadUrl);
+
+  ipcMain.on('msg', (event, data) => {
+    console.log('received msg', data);
+    event.sender.send('msg', data);
+  });
 }
 
 app.on('ready', createWindow);

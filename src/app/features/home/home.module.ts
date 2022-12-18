@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common'
-import { NgModule } from '@angular/core'
+import { NgModule } from '@angular/core';
+import { SharedModule } from 'src/app/shared';
 
-import { HomeRoutingModule } from './home-routing.module'
-import { HomeComponent } from './pages/home.component'
+import { HomeRoutingModule } from './home-routing.module';
+import { HomeComponent } from './pages/home.component';
 
 @NgModule({
   declarations: [HomeComponent],
-  imports: [CommonModule, HomeRoutingModule]
+  imports: [HomeRoutingModule, SharedModule]
 })
 export class HomeModule {}
