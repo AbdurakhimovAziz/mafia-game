@@ -13,19 +13,26 @@ function createWindow() {
     }
   });
 
-  mainWindow.loadURL(
-    url.format({
-      pathname: path.join(__dirname, `/dist/mafia-game/index.html`),
-      protocol: 'file:',
-      slashes: true
-    })
-  );
+  const loadUrl = () => {
+    mainWindow.loadURL(
+      url.format({
+        pathname: path.join(__dirname, `/dist/mafia-game/index.html`),
+        protocol: 'file:',
+        slashes: true
+      })
+    );
+  };
+
+  loadUrl();
+
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
+
+  mainWindow.webContents.on('did-fail-load', loadUrl);
 }
 
 app.on('ready', createWindow);
