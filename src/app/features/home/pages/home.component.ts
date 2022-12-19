@@ -1,7 +1,7 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { SocketService } from 'src/app/core';
+import { SocketService, SOCKET_EVENTS } from 'src/app/core';
 // import { ElectronService, SocketService } from 'src/app/core';
 
 @Component({
@@ -16,9 +16,9 @@ export class HomeComponent implements OnInit {
     message: new FormControl('')
   });
 
-  constructor(private socketService: SocketService, private zone: NgZone) {}
+  constructor(private socketService: SocketService, private zone: NgZone) { }
   ngOnInit(): void {
-    this.socketService.on('msg').subscribe((msg) => {
+    this.socketService.on<string>(SOCKET_EVENTS.MESSAGE).subscribe((msg) => {
       console.log('Message from main process: ', msg);
       this.zone.run(() => {
         this.messages.next([...this.messages.value, msg]);
@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
     //   ...this.messages.value,
     //   this.messageGr.value.message || ''
     // ]);
-    this.socketService.sendMsg(this.messageGr.value.message || '');
+    this.socketService.send(SOCKET_EVENTS.MESSAGE, this.messageGr.value.message || '');
     this.messageGr.reset();
   }
 }
