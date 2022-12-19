@@ -13,9 +13,12 @@ export class SocketService {
   private isConnected = false;
 
   constructor(private electronService: ElectronService) {
-    (<any>window).electronAPI.on(IPC_MESSAGES.MESSAGE, (_: any, data: string) => {
-      this.messages.next({ event: SOCKET_EVENTS.MESSAGE, data });
-    });
+    (<any>window).electronAPI?.on(
+      IPC_MESSAGES.MESSAGE,
+      (_: any, data: string) => {
+        this.messages.next({ event: SOCKET_EVENTS.MESSAGE, data });
+      }
+    );
   }
 
   connect() {
@@ -26,7 +29,7 @@ export class SocketService {
   }
 
   public send<T>(event: SOCKET_EVENTS, data: T): void {
-    (<any>window).electronAPI.send(data);
+    (<any>window).electronAPI?.send(data);
   }
 
   public on<T>(event: SOCKET_EVENTS): Observable<T> {

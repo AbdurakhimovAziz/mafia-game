@@ -1,10 +1,12 @@
-import { NgModule } from '@angular/core'
-import { RouterModule, Routes } from '@angular/router'
-import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component'
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component';
+import { AuthGuard } from './core/guards';
 
 const routes: Routes = [
   {
     path: '',
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import('./features/home/home.module').then((m) => m.HomeModule)
   },
@@ -15,7 +17,7 @@ const routes: Routes = [
   },
   { path: '', redirectTo: '/', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
-]
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

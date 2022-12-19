@@ -1,5 +1,129 @@
-<div class="flex justify-center align-center">
-  <div>
-    register
+<div
+  class="flex items-center justify-center h-full mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-lg w-full">
+    <!-- <h1 class="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">
+       Get started today
+     </h1>
+
+     <p class="mx-auto mt-4 max-w-md text-center text-gray-500">
+       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati sunt
+       dolores deleniti inventore quaerat mollitia?
+     </p>-->
+
+    <form
+      (ngSubmit)="onSubmit()"
+      [formGroup]="registerForm"
+      class="mt-6 mb-0 space-y-8 rounded-lg p-8 shadow-2xl">
+      <h2 class="form-title">Sign up</h2>
+
+      <div class="relative">
+        <label class="text-sm font-medium" for="email">Email</label>
+
+        <div class="relative mt-1">
+          <input
+            class="input"
+            formControlName="email"
+            id="email"
+            placeholder="Enter email"
+            type="email"/>
+        </div>
+
+        <app-input-error
+          [control]="email"
+          [errName]="'email'"
+          [submitted]="isSubmitted">
+          Email is invalid
+        </app-input-error>
+        <app-input-error
+          [control]="email"
+          [errName]="'required'"
+          [submitted]="isSubmitted">
+          Email is required
+        </app-input-error>
+      </div>
+
+      <div class="relative">
+        <label class="text-sm font-medium" for="username">Username</label>
+
+        <div class="relative mt-1">
+          <input
+            class="input"
+            formControlName="username"
+            id="username"
+            placeholder="Enter username"
+            type="text"/>
+        </div>
+
+        <app-input-error
+          [control]="username"
+          [errName]="'required'"
+          [submitted]="isSubmitted">
+          Username is required
+        </app-input-error>
+        <app-input-error
+          [control]="username"
+          [errName]="'minlength'"
+          [submitted]="isSubmitted">
+          Username must contain at least 6 characters
+        </app-input-error>
+      </div>
+
+      <div class="relative">
+        <label class="text-sm font-medium" for="password">Password</label>
+
+        <div class="relative mt-1">
+          <input
+            [type]="isPasswordVisible ? 'text' : 'password'"
+            class="input"
+            formControlName="password"
+            id="password"
+            placeholder="Enter password"/>
+
+          <button
+            (click)="togglePasswordVisibility()"
+            class="absolute inset-y-0 right-4 inline-flex items-center"
+            type="button">
+            <mat-icon class="text-gray-400">{{
+              isPasswordVisible ? 'visibility' : 'visibility_off'
+              }}</mat-icon>
+          </button>
+        </div>
+        <span
+          [hidden]="
+            !password?.hasError('required') ||
+            (password?.pristine && !isSubmitted)
+          "
+          class="input-error"
+        >Password is required</span
+        >
+        <span
+          [hidden]="
+            !password?.hasError('minlength') ||
+            (password?.pristine && !isSubmitted)
+          "
+          class="input-error"
+        >Password must contain at least 8 characters</span
+        >
+        <app-input-error
+          [control]="password"
+          [errName]="'required'"
+          [submitted]="isSubmitted">
+          Password is required
+        </app-input-error>
+        <app-input-error
+          [control]="password"
+          [errName]="'minlength'"
+          [submitted]="isSubmitted">
+          Password must contain at least 8 characters
+        </app-input-error>
+      </div>
+
+      <button class="btn" type="submit">Sign in</button>
+
+      <p class="text-center text-sm text-gray-500">
+        Already have an account?
+        <a class="underline" routerLink="../login">Sign in</a>
+      </p>
+    </form>
   </div>
 </div>

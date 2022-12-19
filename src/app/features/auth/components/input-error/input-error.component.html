@@ -1,0 +1,5 @@
+<span
+  [hidden]="!control?.hasError(errName) || (control?.pristine && !submitted)"
+  class="input-error">
+  <ng-content></ng-content>
+</span>

@@ -9,26 +9,28 @@ import { LoginForm } from '../../utils';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+  public isSubmitted = false;
   public loginForm = new FormGroup<LoginForm>({
     // email: new FormControl('', {
     //   nonNullable: true,
     //   validators: [Validators.required, Validators.email]
     // }),
-    password: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.minLength(8)]
-    }),
     username: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required, Validators.minLength(6)]
+    }),
+    password: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(8)]
     })
   });
-
-  constructor(private authService: AuthService) {}
+  // }
+  isPasswordVisible: any;
 
   // get email() {
   //   return this.loginForm.get('email');
-  // }
+
+  constructor(private authService: AuthService) {}
 
   get username() {
     return this.loginForm.get('username');
@@ -40,6 +42,13 @@ export class LoginComponent {
 
   public onSubmit() {
     console.log(this.loginForm.value);
-    // this.authService.login(this.loginForm.value);
+    this.isSubmitted = true;
+    this.loginForm.markAsTouched();
+    this.loginForm.valid &&
+      this.authService.login(this.loginForm.getRawValue());
+  }
+
+  public togglePasswordVisibility() {
+    this.isPasswordVisible = !this.isPasswordVisible;
   }
 }

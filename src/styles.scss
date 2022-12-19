@@ -6,11 +6,23 @@ html,
 body {
   height: 100%;
 }
+
 body {
-  margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
+  margin: 0;
 }
 
 .btn {
   @apply block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white;
+}
+
+.input {
+  @apply w-full rounded-lg border border-gray-300 p-4 pr-12 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent;
+  &-error {
+    @apply absolute -bottom-6 left-1 text-red-500 text-sm;
+  }
+}
+
+.form-title {
+  @apply text-2xl font-medium text-gray-900 text-center;
 }

@@ -4,3 +4,7 @@ export type LoginForm = {
   username: FormControl<string>;
   password: FormControl<string>;
 };
+
+export type RegisterForm = LoginForm & {
+  email: FormControl<string>;
+};
