@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { filter, map, Observable, Subject } from 'rxjs';
-import { SOCKET } from '../../api';
-import { IPC_MESSAGES, SOCKET_EVENTS } from '../../constants';
+import { SOCKET_EVENTS } from '../../constants';
 import { ISocketMessage } from '../../models';
 import { ElectronService } from '../electron';
+import { IPC_MESSAGES } from '../../../../../electron/utils';
 
 @Injectable({
   providedIn: 'root'
@@ -23,13 +23,14 @@ export class SocketService {
 
   connect() {
     if (!this.isConnected) {
-      (<any>window).socket.connect(SOCKET);
+      console.log('Connecting to socket');
+      (<any>window).socket?.connect();
       this.isConnected = true;
     }
   }
 
   public send<T>(event: SOCKET_EVENTS, data: T): void {
-    (<any>window).electronAPI?.send(data);
+    (<any>window).socket?.send(data);
   }
 
   public on<T>(event: SOCKET_EVENTS): Observable<T> {

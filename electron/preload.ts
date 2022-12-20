@@ -1,11 +1,5 @@
-const { contextBridge, ipcRenderer } = require('electron');
-const IPC_MESSAGES = {
-  MESSAGE: 'message',
-  SOCKET_CONNECT: 'socket-connect',
-  SOCKET_DISCONNECT: 'socket-disconnect',
-  SOCKET_SEND: 'socket-send',
-  SOCKET_DATA: 'socket-data'
-};
+import { contextBridge, ipcRenderer } from 'electron';
+import { IPC_MESSAGES } from './utils';
 
 contextBridge.exposeInMainWorld('electronAPI', {
   send: (msg) => ipcRenderer.send(IPC_MESSAGES.MESSAGE, msg),
@@ -13,8 +7,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
 });
 
 contextBridge.exposeInMainWorld('socket', {
-  connect: (socketOpts) =>
-    ipcRenderer.invoke(IPC_MESSAGES.SOCKET_CONNECT, socketOpts),
+  connect: () => ipcRenderer.invoke(IPC_MESSAGES.SOCKET_CONNECT),
   disconnect: () => ipcRenderer.invoke(IPC_MESSAGES.SOCKET_DISCONNECT),
   send: (socketMessage) =>
     ipcRenderer.send(IPC_MESSAGES.SOCKET_SEND, socketMessage),

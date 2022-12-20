@@ -1,5 +1,5 @@
 export enum SOCKET_EVENTS {
-  MESSAGE = 'message',
+  MESSAGE = 'socket-message',
   GAME_MESSAGE = 'game-message',
   LOBBY_MESSAGE = 'lobby-message',
   GAME_START = 'game-start',
