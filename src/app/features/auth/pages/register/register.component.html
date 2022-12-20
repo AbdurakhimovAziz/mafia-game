@@ -81,29 +81,14 @@
 
           <button
             (click)="togglePasswordVisibility()"
+            [tabIndex]="-1"
             class="absolute inset-y-0 right-4 inline-flex items-center"
             type="button">
-            <mat-icon class="text-gray-400">{{
+            <mat-icon class="text-white">{{
               isPasswordVisible ? 'visibility' : 'visibility_off'
             }}</mat-icon>
           </button>
         </div>
-        <span
-          [hidden]="
-            !password?.hasError('required') ||
-            (password?.pristine && !isSubmitted)
-          "
-          class="input-error"
-          >Password is required</span
-        >
-        <span
-          [hidden]="
-            !password?.hasError('minlength') ||
-            (password?.pristine && !isSubmitted)
-          "
-          class="input-error"
-          >Password must contain at least 8 characters</span
-        >
         <app-input-error
           [control]="password"
           [errName]="'required'"
@@ -118,7 +103,33 @@
         </app-input-error>
       </div>
 
-      <button class="btn" type="submit">Sign in</button>
+      <div class="relative">
+        <label class="form-label" for="password">Repeat Password</label>
+
+        <div class="relative mt-1">
+          <input
+            [type]="isConfirmPasswordVisible ? 'text' : 'password'"
+            class="input"
+            formControlName="confirmPassword"
+            id="confirmPassword"
+            placeholder="Repeat password" />
+
+          <button
+            (click)="toggleConfirmPasswordVisibility()"
+            [tabIndex]="-1"
+            class="absolute inset-y-0 right-4 inline-flex items-center"
+            type="button">
+            <mat-icon class="text-white">{{
+              isConfirmPasswordVisible ? 'visibility' : 'visibility_off'
+            }}</mat-icon>
+          </button>
+          <span [hidden]="!passwordMismatch || !isSubmitted" class="input-error"
+            >Passwords do not match</span
+          >
+        </div>
+      </div>
+
+      <button class="btn" type="submit">Sign up</button>
     </form>
   </div>
 </div>

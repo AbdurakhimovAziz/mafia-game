@@ -7,4 +7,5 @@ export type LoginForm = {
 
 export type RegisterForm = LoginForm & {
   email: FormControl<string>;
+  confirmPassword: FormControl<string>;
 };
