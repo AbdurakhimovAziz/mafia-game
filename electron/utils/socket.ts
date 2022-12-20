@@ -10,9 +10,9 @@ export const handleSocketConnect = (e, mainWindow) => {
   socket.connect(port, host, () => {
     console.log('Connected');
   });
-  console.log('Socket handle', SOCKET);
   socket.on('error', (err) => {
     console.log('Socket error', err);
+    mainWindow.webContents.send(IPC_MESSAGES.SOCKET_ERROR, err);
   });
   socket.on('data', (data) => {
     console.log('received data from socket', data.toString());

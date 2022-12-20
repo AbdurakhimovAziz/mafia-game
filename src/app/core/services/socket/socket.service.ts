@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { filter, map, Observable, Subject } from 'rxjs';
+import { filter, Observable, Subject } from 'rxjs';
 import { SOCKET_EVENTS } from '../../constants';
 import { ISocketMessage } from '../../models';
 import { ElectronService } from '../electron';
-import { IPC_MESSAGES } from '../../../../../electron/utils';
 
 @Injectable({
   providedIn: 'root'
@@ -11,32 +10,45 @@ import { IPC_MESSAGES } from '../../../../../electron/utils';
 export class SocketService {
   private messages: Subject<ISocketMessage<any>> = new Subject();
   private isConnected = false;
+  private nodeWindow = <any>window;
 
-  constructor(private electronService: ElectronService) {
-    (<any>window).electronAPI?.on(
-      IPC_MESSAGES.MESSAGE,
-      (_: any, data: string) => {
-        this.messages.next({ event: SOCKET_EVENTS.MESSAGE, data });
-      }
-    );
-  }
+  constructor(private electronService: ElectronService) {}
 
   connect() {
     if (!this.isConnected) {
       console.log('Connecting to socket');
-      (<any>window).socket?.connect();
+      this.nodeWindow.socket?.connect();
       this.isConnected = true;
+
+      this.nodeWindow.socket?.handleSocketData((e, data) => {
+        this.messages.next(JSON.parse(data));
+      });
+
+      this.nodeWindow.socket?.handleSocketError((e, data) =>
+        console.log('Socket error', data)
+      );
     }
   }
 
-  public send<T>(event: SOCKET_EVENTS, data: T): void {
-    (<any>window).socket?.send(JSON.stringify(data));
+  public send<T>(event: SOCKET_EVENTS, data?: T): void {
+    const msg: ISocketMessage<T> = {
+      event,
+      data
+    };
+    this.nodeWindow.socket?.send(JSON.stringify(msg));
   }
 
-  public on<T>(event: SOCKET_EVENTS): Observable<T> {
+  public on<T>(event: SOCKET_EVENTS): Observable<ISocketMessage<T>> {
     return this.messages.pipe(
-      filter((msg: ISocketMessage<T>) => msg.event === event),
-      map((msg: ISocketMessage<T>) => msg.data)
+      filter((msg: ISocketMessage<T>) => msg.event === event)
     );
+  }
+
+  public disconnect() {
+    if (this.isConnected) {
+      console.log('Disconnecting from socket');
+      this.nodeWindow.socket?.disconnect();
+      this.isConnected = false;
+    }
   }
 }

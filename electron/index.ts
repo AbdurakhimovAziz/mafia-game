@@ -42,12 +42,6 @@ function createWindow() {
 
   mainWindow.webContents.on('did-fail-load', loadUrl);
 
-  ipcMain.on(IPC_MESSAGES.MESSAGE, (event, data) => {
-    console.log('received msg', data);
-    event.sender.send('message', data);
-  });
-
-  //TODO: add socket logic
   ipcMain.handle(IPC_MESSAGES.SOCKET_CONNECT, (event) =>
     handleSocketConnect(event, mainWindow)
   );

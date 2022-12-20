@@ -11,6 +11,6 @@ export enum SOCKET_EVENTS {
   CREATE_LOBBY = 'create-lobby',
   JOIN_LOBBY = 'join-lobby',
   LEAVE_LOBBY = 'leave-lobby',
-  ERROR = 'error',
-  LOBBY_LIST = 'lobby-list'
+  LOBBY_LIST = 'lobby-list',
+  ERROR = 'error'
 }

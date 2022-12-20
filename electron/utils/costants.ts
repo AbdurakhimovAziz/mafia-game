@@ -3,7 +3,8 @@ export enum IPC_MESSAGES {
   SOCKET_CONNECT = 'socket-connect',
   SOCKET_DISCONNECT = 'socket-disconnect',
   SOCKET_SEND = 'socket-send',
-  SOCKET_DATA = 'socket-data'
+  SOCKET_DATA = 'socket-data',
+  SOCKET_ERROR = 'socket-error'
 }
 
 export const SOCKET = {
