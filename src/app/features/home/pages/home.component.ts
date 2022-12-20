@@ -17,8 +17,7 @@ export class HomeComponent implements OnInit {
     message: new FormControl('')
   });
 
-  constructor(private socketService: SocketService, private zone: NgZone) {
-  }
+  constructor(private socketService: SocketService, private zone: NgZone) {}
 
   get message() {
     return this.messageGr.get('message');
@@ -43,7 +42,7 @@ export class HomeComponent implements OnInit {
     //   ...this.messages.value,
     //   this.messageGr.value.message || ''
     // ]);
-    this.socketService.send(SOCKET_EVENTS.MESSAGE, this.messageGr.value.message || '');
+    this.socketService.send(SOCKET_EVENTS.MESSAGE, this.messageGr.value);
     this.messageGr.reset();
   }
 }

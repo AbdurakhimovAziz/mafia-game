@@ -15,7 +15,7 @@ var handleSocketConnect = function (e, mainWindow) {
         console.log('Socket error', err);
     });
     socket.on('data', function (data) {
-        console.log('received data from socket', data);
+        console.log('received data from socket', data.toString());
         mainWindow.webContents.send(costants_1.IPC_MESSAGES.SOCKET_DATA, data);
     });
     return 'connected';

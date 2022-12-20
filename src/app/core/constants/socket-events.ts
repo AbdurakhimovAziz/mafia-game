@@ -8,9 +8,9 @@ export enum SOCKET_EVENTS {
   GAME_NIGHT = 'game-night',
   GAME_ACTION = 'game-action',
   GAME_VOTE = 'game-vote',
+  CREATE_LOBBY = 'create-lobby',
   JOIN_LOBBY = 'join-lobby',
   LEAVE_LOBBY = 'leave-lobby',
-  CREATE_LOBBY = 'create-lobby',
   ERROR = 'error',
   LOBBY_LIST = 'lobby-list'
 }

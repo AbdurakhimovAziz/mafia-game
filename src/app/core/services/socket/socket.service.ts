@@ -30,7 +30,7 @@ export class SocketService {
   }
 
   public send<T>(event: SOCKET_EVENTS, data: T): void {
-    (<any>window).socket?.send(data);
+    (<any>window).socket?.send(JSON.stringify(data));
   }
 
   public on<T>(event: SOCKET_EVENTS): Observable<T> {
