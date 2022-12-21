@@ -31,6 +31,7 @@ export class SocketService {
   }
 
   public send<T>(event: SOCKET_EVENTS, data?: T): void {
+    console.log('Sending socket message', event, data);
     const msg: ISocketMessage<T> = {
       event,
       data

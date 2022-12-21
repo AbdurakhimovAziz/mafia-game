@@ -11,10 +11,6 @@ import { LoginForm } from '../../utils';
 export class LoginComponent {
   public isSubmitted = false;
   public loginForm = new FormGroup<LoginForm>({
-    // email: new FormControl('', {
-    //   nonNullable: true,
-    //   validators: [Validators.required, Validators.email]
-    // }),
     username: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required, Validators.minLength(6)]

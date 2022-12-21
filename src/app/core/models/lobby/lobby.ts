@@ -4,5 +4,6 @@ export interface ILobby {
   id: string;
   name: string;
   players?: IUser[];
-  maxPlayers: number;
+  host: IUser['username'];
+  playersCount: number;
 }

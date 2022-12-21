@@ -1,6 +1,6 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ILobby, SOCKET_EVENTS, SocketService } from '../../../../core';
-import { Subject, Subscription } from 'rxjs';
 import { LobbyService } from '../../../../core/services/lobby/lobby.service';
 
 @Component({
@@ -9,7 +9,8 @@ import { LobbyService } from '../../../../core/services/lobby/lobby.service';
   styleUrls: ['./lobby-join.component.scss']
 })
 export class LobbyJoinComponent implements OnInit, OnDestroy {
-  public lobbies = new Subject<ILobby[]>();
+  public lobbies: ILobby[] = [];
+
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -24,7 +25,7 @@ export class LobbyJoinComponent implements OnInit, OnDestroy {
       this.socket.on<ILobby[]>(SOCKET_EVENTS.LOBBY_LIST).subscribe((msg) => {
         console.log('lobby list', msg);
         this.zone.run(() => {
-          this.lobbies.next(msg.data!);
+          this.lobbies = msg.data || [];
         });
       })
     );

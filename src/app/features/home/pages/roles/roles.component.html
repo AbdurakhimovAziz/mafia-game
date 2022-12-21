@@ -4,10 +4,11 @@
   <h2 class="text-5xl">Roles</h2>
   <ul class="flex space-x-10 text-xl">
     <li *ngFor="let role of roles" class="basis-1/5 p-5">
-      <img [src]="'assets/logo.png'" alt="">
-
+      <div class="flex justify-center items-center mb-10">
+        <img  [src]="'assets/roles/' + role.name + '.png'" alt="">
+      </div>
       <h3 class="uppercase text-2xl mb-10">{{ role.name }}</h3>
-      <p>{{ role.description }}</p>
+      <p> {{ role.description }}</p>
     </li>
   </ul>
 </section>

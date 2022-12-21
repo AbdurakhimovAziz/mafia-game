@@ -1,0 +1,12 @@
+<section class="relative p-40 text-4xl">
+  <app-go-back></app-go-back>
+  <div class="h-full flex flex-col justify-center">
+    <h2>Choose the room</h2>
+    <ul>
+      <li class="flex space-x-10 items-center" *ngFor="let lobby of lobbies">
+        <p>{{ lobby.name }}</p>
+        <button (click)="joinLobby(lobby.id)">Join</button>
+      </li>
+    </ul>
+  </div>
+</section>

@@ -20,6 +20,7 @@ body {
 }
 
 .btn {
+  @apply rounded-3xl px-5 py-2;
   &-primary {
     background-color: rgba(209, 17, 87, 0.4);
     @apply block w-full rounded-3xl px-5 py-3 text-sm font-medium text-white uppercase;

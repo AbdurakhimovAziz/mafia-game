@@ -1,7 +1,7 @@
 import { Component, NgZone } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LobbyService } from '../../../../core/services/lobby/lobby.service';
-import { FormControl, FormGroup } from '@angular/forms';
-import { LobbyForm } from '../../utils';
+import { LobbyForm } from '../../utils/types';
 
 @Component({
   selector: 'app-lobby-create',
@@ -10,13 +10,16 @@ import { LobbyForm } from '../../utils';
 })
 export class LobbyCreateComponent {
   public lobbyForm = new FormGroup<LobbyForm>({
-    name: new FormControl('', { nonNullable: true }),
-    maxPlayers: new FormControl(7, { nonNullable: true })
+    name: new FormControl('', {
+      nonNullable: true,
+      validators: Validators.required
+    })
   });
 
   constructor(private lobbyService: LobbyService, private zone: NgZone) {}
 
   public createLobby(): void {
-    this.lobbyService.createLobby();
+    this.lobbyService.createLobby(this.lobbyForm.getRawValue().name);
+    this.lobbyForm.reset();
   }
 }
