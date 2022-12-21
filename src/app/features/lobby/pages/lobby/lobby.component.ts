@@ -2,6 +2,7 @@ import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   ILobby,
+  LobbyJoinedResponse,
   LobbyJoinResponse,
   SOCKET_EVENTS,
   SocketService,
@@ -50,6 +51,7 @@ export class LobbyComponent
 
   ngOnInit(): void {
     this.lobbyId = this.route.snapshot.paramMap.get('lobbyId');
+
     this.addSubscription(
       this.socket
         .on<LobbyJoinResponse>(SOCKET_EVENTS.JOIN_LOBBY)
@@ -59,6 +61,17 @@ export class LobbyComponent
           });
         })
     );
+
+    this.addSubscription(
+      this.socket
+        .on<LobbyJoinedResponse>(SOCKET_EVENTS.JOINED_LOBBY)
+        .subscribe((response) => {
+          this.zone.run(() => {
+            response.data && this.lobbyService.addPlayerToLobby(response.data!);
+          });
+        })
+    );
+
     this.lobbyId &&
       !this.lobbyService.getCurrentLobby() &&
       this.lobbyService.joinLobby(this.lobbyId);

@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var electron_1 = require("electron");
-var utils_1 = require("./utils");
-var url = require("url");
 var path = require("path");
+var url = require("url");
+var utils_1 = require("./utils");
 var mainWindow;
 var loadUrl = function () {
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, "/../../dist/mafia-game/index.html"),
+        pathname: path.join(__dirname, "/../../dist/index.html"),
         protocol: 'file:',
         slashes: true
     }));

@@ -5,7 +5,8 @@ import {
   ILobby,
   LobbyCreateDTO,
   LobbyJoinDTO,
-  LobbyLeaveDTO
+  LobbyLeaveDTO,
+  Player
 } from '../../models';
 import { SocketService } from '../socket';
 import { UserService } from '../user';
@@ -51,6 +52,14 @@ export class LobbyService {
       id,
       username
     });
+  }
+
+  public addPlayerToLobby(player: Player) {
+    const currentLobby = this.getCurrentLobby();
+    if (currentLobby) {
+      currentLobby.players?.push(player);
+      this.setCurrentLobby(currentLobby);
+    }
   }
 
   public setCurrentLobby(lobby: ILobby | null) {

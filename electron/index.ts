@@ -1,4 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
+import * as path from 'path';
+
+import * as url from 'url';
 import {
   handleSocketConnect,
   handleSocketDisconnect,
@@ -6,15 +9,12 @@ import {
   IPC_MESSAGES
 } from './utils';
 
-import * as url from 'url';
-import * as path from 'path';
-
 let mainWindow: BrowserWindow;
 
 const loadUrl = () => {
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, `/../../dist/mafia-game/index.html`),
+      pathname: path.join(__dirname, `/../../dist/index.html`),
       protocol: 'file:',
       slashes: true
     })

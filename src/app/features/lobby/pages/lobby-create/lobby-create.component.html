@@ -1,7 +1,7 @@
 <section class="relative h-full flex items-center justify-center">
   <app-go-back></app-go-back>
   <form
-    class="flex flex-col basis-1/4 space-y-10 text-4xl"
+    class="flex flex-col max-w-md w-full space-y-10 text-4xl"
     [formGroup]="lobbyForm"
     (ngSubmit)="createLobby()">
     <label for="lobbyName">Name of the room</label>

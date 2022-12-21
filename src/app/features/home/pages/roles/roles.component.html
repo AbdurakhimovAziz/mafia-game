@@ -2,13 +2,13 @@
   class="relative h-full flex flex-col justify-center p-20 text-center space-y-20">
   <app-go-back></app-go-back>
   <h2 class="text-5xl">Roles</h2>
-  <ul class="flex space-x-10 text-xl">
+  <ul class="flex space-x-4 text-xl">
     <li *ngFor="let role of roles" class="basis-1/5 p-5">
       <div class="flex justify-center items-center mb-10">
-        <img  [src]="'assets/roles/' + role.name + '.png'" alt="">
+        <img [src]="'assets/roles/' + role.name + '.png'" alt="" />
       </div>
       <h3 class="uppercase text-2xl mb-10">{{ role.name }}</h3>
-      <p> {{ role.description }}</p>
+      <p>{{ role.description }}</p>
     </li>
   </ul>
 </section>
