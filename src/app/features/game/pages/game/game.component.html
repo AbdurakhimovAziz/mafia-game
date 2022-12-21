@@ -1,1 +1,53 @@
-<p>game works!</p>
+<section class="h-full flex items-end" *ngIf="gamePhase$ | async as gamePhase">
+  <div
+    class="h-full basis-1/2 bg-opacity-40"
+    [ngClass]="{
+      'bg-black': gamePhase === 'night',
+      'bg-amber-300': gamePhase === 'day'
+    }">
+    <div
+      class="h-full flex flex-col justify-between text-4xl py-24 px-10"
+      *ngIf="currentLobby$ | async as lobby">
+      <div class="flex flex-col space-y-14">
+        <h2>
+          Lobby name: <span class="ml-10">{{ lobby.name }}</span>
+        </h2>
+        <div class="flex space-x-10">
+          <p>Players:</p>
+          <ul>
+            <li
+              class="flex space-x-64 mb-5"
+              *ngFor="let player of lobby.players">
+              <p>
+                {{ player.username }}
+              </p>
+              <p *ngIf="lobby.host === player.username">some action</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="flex flex-col justify-end h-2/3 basis-1/2 bg-opacity-40 m-5 rounded-lg"
+    [ngClass]="{
+      'bg-black': gamePhase === 'night',
+      'bg-amber-300': gamePhase === 'day'
+    }">
+    <form>
+      <div class="relative p-5">
+        <input
+          class="w-full px-5 py-3 color-white rounded-lg bg-opacity-50 placeholder-white focus:outline-0"
+          type="text"
+          placeholder="Write a message..."
+          [ngClass]="{
+            'bg-fuchsia-400': gamePhase === 'night',
+            'bg-amber-300': gamePhase === 'day'
+          }" />
+        <button type="submit" class="absolute top-8 right-10">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

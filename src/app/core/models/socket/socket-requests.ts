@@ -13,3 +13,7 @@ export interface LobbyJoinDTO {
 }
 
 export interface LobbyLeaveDTO extends LobbyJoinDTO {}
+
+export interface StartGameDTO {
+  lobbyId: string;
+}

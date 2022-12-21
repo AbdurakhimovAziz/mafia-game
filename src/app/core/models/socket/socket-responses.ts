@@ -1,3 +1,4 @@
+import { GAME_ROLE_NAMES } from '../../constants';
 import { ILobby } from '../lobby';
 import { IUser } from '../user';
 
@@ -13,3 +14,7 @@ export interface LobbyLeftResponse {
 }
 
 export interface LobbyJoinedResponse extends LobbyLeftResponse {}
+
+export interface GameStartResponse {
+  role: GAME_ROLE_NAMES;
+}

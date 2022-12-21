@@ -1,5 +1,5 @@
 <section class="relative h-full p-20">
-  <app-go-back></app-go-back>
+  <app-go-back (onClick)="leaveLobby()"></app-go-back>
   <div
     class="h-full flex flex-col justify-between text-4xl py-24 px-10"
     *ngIf="lobby$ | async as lobby">

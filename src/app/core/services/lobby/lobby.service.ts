@@ -52,6 +52,7 @@ export class LobbyService {
       id,
       username
     });
+    this.setCurrentLobby(null);
   }
 
   public addPlayerToLobby(player: Player) {
