@@ -62,6 +62,16 @@ export class LobbyService {
     }
   }
 
+  public removePlayerFromLobby(playerId: string) {
+    const currentLobby = this.getCurrentLobby();
+    if (currentLobby) {
+      currentLobby.players = currentLobby.players?.filter(
+        (player) => player.id !== playerId
+      );
+      this.setCurrentLobby(currentLobby);
+    }
+  }
+
   public setCurrentLobby(lobby: ILobby | null) {
     this.currentLobby.next(lobby);
   }

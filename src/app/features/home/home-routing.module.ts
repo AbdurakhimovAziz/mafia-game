@@ -15,6 +15,10 @@ const routes: Routes = [
       import('../lobby/lobby.module').then((m) => m.LobbyModule)
   },
   {
+    path: 'game',
+    loadChildren: () => import('../game/game.module').then((m) => m.GameModule)
+  },
+  {
     path: 'roles',
     component: RolesComponent
   }

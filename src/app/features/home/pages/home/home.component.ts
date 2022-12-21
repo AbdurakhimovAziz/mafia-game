@@ -1,15 +1,19 @@
-import {Component, NgZone, OnInit} from '@angular/core';
-import {SocketService} from 'src/app/core';
-
-// import { ElectronService, SocketService } from 'src/app/core';
+import { Component } from '@angular/core';
+import { AuthService, UserService } from 'src/app/core';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
-  constructor(private socketService: SocketService, private zone: NgZone) {}
+export class HomeComponent {
+  constructor(private userService: UserService, private auth: AuthService) {}
 
-  ngOnInit(): void {}
+  public get username(): string {
+    return this.userService.getUser()?.username || '';
+  }
+
+  public logout(): void {
+    this.auth.logout();
+  }
 }

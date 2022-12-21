@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BASE_URL } from '../../api';
-import { LoginRequest, RegisterRequest } from './types';
-import { UserService } from '../user';
-import { IUser } from '../../models';
 import { Router } from '@angular/router';
+import { BASE_URL } from '../../api';
+import { IUser } from '../../models';
+import { UserService } from '../user';
+import { LoginRequest, RegisterRequest } from './types';
 
 @Injectable({
   providedIn: 'root'
@@ -74,5 +74,10 @@ export class AuthService {
 
   public isLoggedIn(): boolean {
     return !!this.userService.getUser();
+  }
+
+  public logout(): void {
+    this.userService.setUser(null);
+    this.router.navigate(['auth/login']);
   }
 }

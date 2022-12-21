@@ -1,6 +1,11 @@
-<section class="h-full flex items-center justify-center">
+<section class="relative h-full flex items-center justify-center p-20">
   <div
-    class="flex flex-col basis-1/6 max-w-2xl space-y-10 text-4xl text-center">
+    class="absolute left-36 top-1/2 max-w-[250px] w-full p-10 bg-gray-300 bg-opacity-50 rounded-xl text-center -translate-y-1/2">
+    <div class="text-2xl text-teal-300 mb-10">{{ username }}</div>
+    <button class="btn btn-tertiary" (click)="logout()">Log out</button>
+  </div>
+  <div
+    class="flex flex-col basis-1/4 max-w-2xl w-full space-y-10 text-4xl text-center">
     <a class="btn btn-secondary" routerLink="./play">Play</a>
     <a class="btn btn-tertiary" routerLink="./roles">Roles</a>
   </div>

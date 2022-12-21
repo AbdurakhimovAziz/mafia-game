@@ -1,15 +1,16 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
-  ILobby,
   LobbyJoinedResponse,
   LobbyJoinResponse,
+  LobbyLeftResponse,
   SOCKET_EVENTS,
   SocketService,
   UserService
 } from '../../../../core';
 import { LobbyService } from '../../../../core/services/lobby/lobby.service';
 import { SubscriptionDestroyer } from '../../../../core/utils';
+import { mockLobby } from '../../utils';
 
 @Component({
   selector: 'app-lobby',
@@ -21,26 +22,11 @@ export class LobbyComponent
   implements OnInit, OnDestroy
 {
   public lobby$ = this.lobbyService.currentLobby$;
-  public mockLobby: ILobby = {
-    id: '123',
-    name: 'lobby name',
-    players: [
-      {
-        id: '123',
-        username: 'test'
-      },
-      {
-        id: '123',
-        username: 'example'
-      }
-    ],
-    host: 'example',
-    playersCount: 1
-  };
   private lobbyId: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private lobbyService: LobbyService,
     private socket: SocketService,
     private userService: UserService,
@@ -72,11 +58,22 @@ export class LobbyComponent
         })
     );
 
+    this.addSubscription(
+      this.socket
+        .on<LobbyLeftResponse>(SOCKET_EVENTS.JOINED_LOBBY)
+        .subscribe((response) => {
+          this.zone.run(() => {
+            response.data &&
+              this.lobbyService.removePlayerFromLobby(response.data.id!);
+          });
+        })
+    );
+
     this.lobbyId &&
       !this.lobbyService.getCurrentLobby() &&
       this.lobbyService.joinLobby(this.lobbyId);
 
-    this.lobbyService.setCurrentLobby(this.mockLobby); // TODO: remove
+    this.lobbyService.setCurrentLobby(mockLobby); // TODO: remove
   }
 
   public isHost(username: string): boolean {
@@ -85,6 +82,7 @@ export class LobbyComponent
 
   public startGame() {
     //TODO: start game
+    this.router.navigate(['game']);
   }
 
   override ngOnDestroy(): void {

@@ -22,7 +22,8 @@
     <button
       class="self-center btn btn-secondary"
       [hidden]="!isHost(lobby.host)"
-      (click)="startGame()">
+      (click)="startGame()"
+      [disabled]="lobby.players && lobby.players.length < 7">
       Start game
     </button>
     <span class="text-center" [hidden]="isHost(lobby.host)">Waiting...</span>
