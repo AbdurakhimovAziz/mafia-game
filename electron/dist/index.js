@@ -28,11 +28,6 @@ function createWindow() {
         mainWindow = null;
     });
     mainWindow.webContents.on('did-fail-load', loadUrl);
-    electron_1.ipcMain.on(utils_1.IPC_MESSAGES.MESSAGE, function (event, data) {
-        console.log('received msg', data);
-        event.sender.send('message', data);
-    });
-    //TODO: add socket logic
     electron_1.ipcMain.handle(utils_1.IPC_MESSAGES.SOCKET_CONNECT, function (event) {
         return (0, utils_1.handleSocketConnect)(event, mainWindow);
     });
