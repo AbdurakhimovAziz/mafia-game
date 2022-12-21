@@ -1,1 +1,30 @@
-<p>lobby works!</p>
+<section class="relative h-full p-20">
+  <app-go-back></app-go-back>
+  <div
+    class="h-full flex flex-col justify-between text-4xl py-24 px-10"
+    *ngIf="lobby$ | async as lobby">
+    <div class="flex flex-col space-y-14">
+      <h2>
+        Lobby name: <span class="ml-10">{{ lobby.name }}</span>
+      </h2>
+      <div class="flex space-x-10">
+        <p>Players:</p>
+        <ul>
+          <li class="flex space-x-64 mb-5" *ngFor="let player of lobby.players">
+            <p>
+              {{ player.username }}
+            </p>
+            <p *ngIf="lobby.host === player.username">Admin</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <button
+      class="self-center btn btn-secondary"
+      [hidden]="!isHost(lobby.host)"
+      (click)="startGame()">
+      Start game
+    </button>
+    <span class="text-center" [hidden]="isHost(lobby.host)">Waiting...</span>
+  </div>
+</section>

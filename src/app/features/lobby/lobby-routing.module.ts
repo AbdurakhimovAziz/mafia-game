@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LobbyCreateComponent } from './pages/lobby-create/lobby-create.component';
 import { LobbyJoinComponent } from './pages/lobby-join/lobby-join.component';
+import { LobbyComponent } from './pages/lobby/lobby.component';
 import { PlayComponent } from './pages/play/play.component';
 
 const routes: Routes = [
@@ -10,12 +11,16 @@ const routes: Routes = [
     component: PlayComponent
   },
   {
-    path: 'create-lobby',
+    path: 'create',
     component: LobbyCreateComponent
   },
   {
-    path: 'join-lobby',
+    path: 'join',
     component: LobbyJoinComponent
+  },
+  {
+    path: ':lobbyId',
+    component: LobbyComponent
   }
 ];
 

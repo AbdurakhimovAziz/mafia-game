@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { SOCKET_EVENTS } from '../../constants';
-import { LobbyCreateDTO, LobbyJoinDTO, LobbyLeaveDTO } from '../../models';
+import {
+  ILobby,
+  LobbyCreateDTO,
+  LobbyJoinDTO,
+  LobbyLeaveDTO
+} from '../../models';
 import { SocketService } from '../socket';
 import { UserService } from '../user';
 
@@ -8,6 +14,9 @@ import { UserService } from '../user';
   providedIn: 'root'
 })
 export class LobbyService {
+  private currentLobby = new BehaviorSubject<ILobby | null>(null);
+  public currentLobby$ = this.currentLobby.asObservable();
+
   constructor(
     private socket: SocketService,
     private userService: UserService
@@ -42,5 +51,13 @@ export class LobbyService {
       id,
       username
     });
+  }
+
+  public setCurrentLobby(lobby: ILobby | null) {
+    this.currentLobby.next(lobby);
+  }
+
+  public getCurrentLobby() {
+    return this.currentLobby.value;
   }
 }
