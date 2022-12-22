@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, timer } from 'rxjs';
 import { GAME_STATUS } from '../../constants';
 import { Player } from '../../models';
 import { GamePhases } from '../../utils';
@@ -11,8 +11,11 @@ import { SocketService } from '../socket';
 })
 export class GameService {
   public gameStatus: GAME_STATUS = GAME_STATUS.WAITING;
-  private gamePhase = new BehaviorSubject<GamePhases>('day');
+  private gamePhase = new BehaviorSubject<GamePhases>('night');
   public gamePhase$ = this.gamePhase.asObservable();
+  private isDiscussionPhaseSubject = new BehaviorSubject<boolean>(false);
+  public isDiscussionPhase$ = this.isDiscussionPhaseSubject.asObservable();
+
   private player: Player | null = {
     id: '123',
     username: 'test',
@@ -23,7 +26,13 @@ export class GameService {
     private socket: SocketService,
     private lobbyService: LobbyService
   ) {
-    console.log('game service');
+    this.gamePhase$.subscribe((phase) => {
+      if (phase === 'day') {
+        this.isDiscussionPhaseSubject.next(true);
+        timer(10000).subscribe(() => {});
+        this.isDiscussionPhaseSubject.next(true);
+      }
+    });
   }
 
   public startGame() {
@@ -44,5 +53,13 @@ export class GameService {
 
   public socketDisconnect() {
     this.socket.disconnect();
+  }
+
+  public isDayPhase(): boolean {
+    return this.gamePhase.getValue() === 'day';
+  }
+
+  public isNightPhase(): boolean {
+    return this.gamePhase.getValue() === 'night';
   }
 }

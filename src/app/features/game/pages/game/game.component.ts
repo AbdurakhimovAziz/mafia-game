@@ -27,6 +27,14 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
     this.lobbyService.setCurrentLobby(mockLobby);
   }
 
+  public isDayPhase(): boolean {
+    return this.gameService.isDayPhase();
+  }
+
+  public isNightPhase(): boolean {
+    return this.gameService.isNightPhase();
+  }
+
   override ngOnDestroy(): void {
     super.ngOnDestroy();
   }

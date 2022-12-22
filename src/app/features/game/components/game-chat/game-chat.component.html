@@ -1,5 +1,5 @@
 <div
-  class="flex flex-col justify-end h-2/3 basis-1/2 p-5 bg-opacity-40 m-5 rounded-lg"
+  class="flex flex-col justify-end h-2/3 basis-1/2 p-5 bg-opacity-40 m-5 rounded-lg transition-colors"
   [ngClass]="{
     'bg-black': gamePhase === 'night',
     'bg-amber-300': gamePhase === 'day'
@@ -19,6 +19,7 @@
       <input
         class="w-full px-5 py-3 color-white rounded-lg bg-opacity-50 placeholder-white focus:outline-0"
         type="text"
+        [disabled]="gamePhase === 'night'"
         placeholder="Write a message..."
         formControlName="message"
         [ngClass]="{

@@ -1,6 +1,6 @@
 <section class="h-full flex items-end" *ngIf="gamePhase$ | async as gamePhase">
   <div
-    class="h-full basis-1/2 bg-opacity-40"
+    class="h-full basis-1/2 bg-opacity-40 transition-colors"
     [ngClass]="{
       'bg-black': gamePhase === 'night',
       'bg-amber-300': gamePhase === 'day'

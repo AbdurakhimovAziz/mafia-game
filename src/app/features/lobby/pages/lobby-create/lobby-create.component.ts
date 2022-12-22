@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import {
   LobbyCreateResponse,
   SOCKET_EVENTS,
-  SocketService
+  SocketService,
+  UserService
 } from '../../../../core';
 import { LobbyService } from '../../../../core/services/lobby/lobby.service';
 import { SubscriptionDestroyer } from '../../../../core/utils';
@@ -31,6 +32,7 @@ export class LobbyCreateComponent
     private lobbyService: LobbyService,
     private router: Router,
     private socket: SocketService,
+    private user: UserService,
     private zone: NgZone
   ) {
     super();
@@ -50,10 +52,12 @@ export class LobbyCreateComponent
   }
 
   public createLobby(): void {
+    const user = this.user.getUser()!;
     this.lobbyService.createLobby(this.lobbyForm.getRawValue().name);
     const lobby = {
       ...mockLobby,
-      name: this.lobbyForm.getRawValue().name
+      name: this.lobbyForm.getRawValue().name,
+      host: user.username
     };
     this.lobbyService.setCurrentLobby(lobby);
     this.router.navigate(['play', lobby.id]);
