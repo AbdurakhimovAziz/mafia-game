@@ -4,10 +4,10 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Create desktop app using electron
 
-1. Make sure you have installed nodejs and npm on your machine.
+1. Make sure you have installed nodejs, git and npm on your machine.
 2. Clone the project `https://github.com/AbdurakhimovAziz/mafia-game.git`
 3. Install dependencies `npm install`
-4. Run `npm run electron-build` to build the project.
+4. Run `npm run electron` to build the project.
 
 ## Development server
 
