@@ -4,7 +4,7 @@
     'bg-black': gamePhase === 'night',
     'bg-amber-300': gamePhase === 'day'
   }">
-  <div class="flex items-end h-full overflow-auto mb-12 scroll-m-1">
+  <div class="flex items-end h-full overflow-auto mb-12 scroll-m-1" #scroll>
     <ul
       class="flex flex-col justify-end mt-auto"
       *ngIf="messages$ | async as messages">

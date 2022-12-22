@@ -1,4 +1,12 @@
-import { Component, Input, NgZone, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  Input,
+  NgZone,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import {
@@ -17,7 +25,10 @@ import { GamePhases, SubscriptionDestroyer } from '../../../../core/utils';
   templateUrl: './game-chat.component.html',
   styleUrls: ['./game-chat.component.scss']
 })
-export class GameChatComponent extends SubscriptionDestroyer implements OnInit {
+export class GameChatComponent
+  extends SubscriptionDestroyer
+  implements OnInit, AfterViewChecked
+{
   @Input() public gamePhase!: GamePhases;
   public messageForm = new FormGroup({
     message: new FormControl('', {
@@ -25,6 +36,7 @@ export class GameChatComponent extends SubscriptionDestroyer implements OnInit {
       validators: Validators.required
     })
   });
+  @ViewChild('scroll') private scrollContainer!: ElementRef;
   private messagesSubject = new BehaviorSubject<GameMessage[]>([]);
   public messages$ = this.messagesSubject.asObservable();
 
@@ -74,6 +86,15 @@ export class GameChatComponent extends SubscriptionDestroyer implements OnInit {
     this.socket.send<GameMessageDTO>(SOCKET_EVENTS.GAME_MESSAGE, message);
     this.messagesSubject.next([...this.messagesSubject.getValue(), message]);
     this.messageForm.reset();
+  }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    const container = this.scrollContainer.nativeElement;
+    container.scrollTop = container.scrollHeight;
   }
 
   public getMessages(): void {
