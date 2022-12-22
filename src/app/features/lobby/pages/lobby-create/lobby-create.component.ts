@@ -8,6 +8,7 @@ import {
 } from '../../../../core';
 import { LobbyService } from '../../../../core/services/lobby/lobby.service';
 import { SubscriptionDestroyer } from '../../../../core/utils';
+import { mockLobby } from '../../utils';
 import { LobbyForm } from '../../utils/types';
 
 @Component({
@@ -42,7 +43,7 @@ export class LobbyCreateComponent
         .subscribe((res) => {
           this.zone.run(() => {
             this.lobbyService.setCurrentLobby(res.data!);
-            this.router.navigate(['lobby', res.data?.id]);
+            this.router.navigate(['play', res.data?.id]);
           });
         })
     );
@@ -50,6 +51,12 @@ export class LobbyCreateComponent
 
   public createLobby(): void {
     this.lobbyService.createLobby(this.lobbyForm.getRawValue().name);
+    const lobby = {
+      ...mockLobby,
+      name: this.lobbyForm.getRawValue().name
+    };
+    this.lobbyService.setCurrentLobby(lobby);
+    this.router.navigate(['play', lobby.id]);
     this.lobbyForm.reset();
   }
 }

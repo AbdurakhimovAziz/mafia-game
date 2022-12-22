@@ -17,8 +17,9 @@
           <ul>
             <li
               class="flex justify-between mb-5"
-              *ngFor="let player of lobby.players">
+              *ngFor="let player of lobby.players; let i = index">
               <p>
+                <span class="mr-5"> {{ i + 1 }}. </span>
                 {{ player.username }}
               </p>
               <button
