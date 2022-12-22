@@ -1,4 +1,6 @@
-<section class="h-full flex items-end" *ngIf="gamePhase$ | async as gamePhase">
+<section
+  class="relative h-full flex items-end"
+  *ngIf="gamePhase$ | async as gamePhase">
   <div
     class="h-full basis-1/2 bg-opacity-40 transition-colors"
     [ngClass]="{
@@ -8,6 +10,11 @@
     <div
       class="h-full flex flex-col justify-between text-xl py-24 px-10"
       *ngIf="currentLobby$ | async as lobby">
+      <div class="absolute p-10 top-0 right-0">
+        <button class="scale-150" (click)="leaveLobby(lobby.id)">
+          <mat-icon> exit_to_app</mat-icon>
+        </button>
+      </div>
       <div class="flex flex-col space-y-4">
         <h2 class="flex items-center justify-between">
           Lobby name: <span>{{ lobby.name }}</span>
@@ -26,9 +33,30 @@
                 {{ player.username }}
               </p>
               <div class="flex space-x-2">
-                <button class="btn-action red" *ngIf="canVote()">Vote</button>
-                <button class="btn-action red" *ngIf="canKill()">Kill</button>
-                <button class="btn-action red" *ngIf="canHeal()">Heal</button>
+                <button
+                  class="btn-action red"
+                  *ngIf="canVote()"
+                  (click)="vote(player.username)">
+                  Vote
+                </button>
+                <button
+                  class="btn-action"
+                  *ngIf="canCheck()"
+                  (click)="check(player.username)">
+                  Check
+                </button>
+                <button
+                  class="btn-action red"
+                  *ngIf="canKill()"
+                  (click)="kill(player.username)">
+                  Kill
+                </button>
+                <button
+                  class="btn-action red"
+                  *ngIf="canHeal()"
+                  (click)="heal(player.username)">
+                  Heal
+                </button>
               </div>
             </li>
           </ul>

@@ -1,11 +1,22 @@
 <section class="relative p-40 text-4xl">
   <app-go-back></app-go-back>
   <div class="h-full flex flex-col justify-center">
-    <h2>Choose the room</h2>
+    <div class="flex space-x-10 mb-10">
+      <h2>Choose the room</h2>
+      <button (click)="fetchLobbies()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
     <ul>
-      <li class="flex space-x-10 items-center" *ngFor="let lobby of lobbies">
+      <li
+        class="flex justify-between space-x-10 items-center border-b-2 border-white py-2 mb-5"
+        *ngFor="let lobby of lobbies">
         <p>{{ lobby.name }}</p>
-        <button (click)="joinLobby(lobby.id)">Join</button>
+        <button
+          class="p-2 rounded-lg text-lg btn-tertiary"
+          (click)="joinLobby(lobby.id)">
+          Join
+        </button>
       </li>
     </ul>
   </div>

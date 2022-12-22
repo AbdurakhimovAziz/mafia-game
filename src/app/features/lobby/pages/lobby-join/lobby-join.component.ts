@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ILobby, SOCKET_EVENTS, SocketService } from '../../../../core';
 import { LobbyService } from '../../../../core/services/lobby/lobby.service';
 import { SubscriptionDestroyer } from '../../../../core/utils';
+import { mockLobby } from '../../utils';
 
 @Component({
   selector: 'app-lobby-join',
@@ -13,7 +14,7 @@ export class LobbyJoinComponent
   extends SubscriptionDestroyer
   implements OnInit, OnDestroy
 {
-  public lobbies: ILobby[] = [];
+  public lobbies: ILobby[] = [mockLobby, mockLobby, mockLobby];
 
   constructor(
     private socket: SocketService,
@@ -34,11 +35,14 @@ export class LobbyJoinComponent
         });
       })
     );
+    this.fetchLobbies();
+  }
+
+  public fetchLobbies(): void {
     this.lobbyService.fetchLobbies();
   }
 
   public joinLobby(lobbyId: string): void {
-    // this.lobbyService.joinLobby(lobbyId);
-    this.router.navigate(['lobby', lobbyId]);
+    this.router.navigate(['play', lobbyId]);
   }
 }

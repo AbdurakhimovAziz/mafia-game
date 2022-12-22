@@ -9,8 +9,7 @@ import {
 } from '../../../../core';
 import { LobbyService } from '../../../../core/services/lobby/lobby.service';
 import { SubscriptionDestroyer } from '../../../../core/utils';
-import { mockLobby } from '../../utils';
-import { LobbyForm } from '../../utils/types';
+import { LobbyForm, mockLobby } from '../../utils';
 
 @Component({
   selector: 'app-lobby-create',
@@ -54,6 +53,8 @@ export class LobbyCreateComponent
   public createLobby(): void {
     const user = this.user.getUser()!;
     this.lobbyService.createLobby(this.lobbyForm.getRawValue().name);
+
+    // TODO: Remove this mock lobby
     const lobby = {
       ...mockLobby,
       name: this.lobbyForm.getRawValue().name,
@@ -61,6 +62,7 @@ export class LobbyCreateComponent
     };
     this.lobbyService.setCurrentLobby(lobby);
     this.router.navigate(['play', lobby.id]);
+
     this.lobbyForm.reset();
   }
 }

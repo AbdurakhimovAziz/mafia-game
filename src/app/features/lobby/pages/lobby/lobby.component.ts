@@ -83,7 +83,8 @@ export class LobbyComponent
               this.gameService.setPlayer({
                 id: user.id,
                 username: user.username,
-                ...response.data
+                ...response.data,
+                isAlive: true
               });
               this.router.navigate(['game']);
             }

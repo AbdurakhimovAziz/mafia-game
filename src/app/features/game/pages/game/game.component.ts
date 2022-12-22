@@ -1,5 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { SocketService } from '../../../../core';
+import { Router } from '@angular/router';
+import {
+  GAME_ACTIONS,
+  GameActionDTO,
+  Player,
+  SOCKET_EVENTS,
+  SocketService,
+  VoteDTO
+} from '../../../../core';
 import { GameService } from '../../../../core/services/game/game.service';
 import { LobbyService } from '../../../../core/services/lobby/lobby.service';
 import { SubscriptionDestroyer } from '../../../../core/utils';
@@ -17,7 +25,8 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
   constructor(
     private gameService: GameService,
     private lobbyService: LobbyService,
-    private socket: SocketService
+    private socket: SocketService,
+    private router: Router
   ) {
     super();
   }
@@ -25,6 +34,53 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
   ngOnInit(): void {
     // TODO: remove
     this.lobbyService.setCurrentLobby(mockLobby);
+  }
+
+  public vote(username: string): void {
+    const currentPlayer = this.getPlayer();
+    currentPlayer &&
+      this.socket.send<VoteDTO>(SOCKET_EVENTS.GAME_VOTE, {
+        player: username,
+        id: currentPlayer.id,
+        username: currentPlayer.username,
+        lobbyId: this.getLobbyId()
+      });
+  }
+
+  public kill(username: string): void {
+    const currentPlayer = this.getPlayer();
+    currentPlayer &&
+      this.socket.send<GameActionDTO>(SOCKET_EVENTS.GAME_ACTION, {
+        player: username,
+        id: currentPlayer.id,
+        username: currentPlayer.username,
+        lobbyId: this.getLobbyId(),
+        action: GAME_ACTIONS.KILL
+      });
+  }
+
+  public check(username: string): void {
+    const currentPlayer = this.getPlayer();
+    currentPlayer &&
+      this.socket.send<GameActionDTO>(SOCKET_EVENTS.GAME_ACTION, {
+        player: username,
+        id: currentPlayer.id,
+        username: currentPlayer.username,
+        lobbyId: this.getLobbyId(),
+        action: GAME_ACTIONS.CHECK
+      });
+  }
+
+  public heal(username: string): void {
+    const currentPlayer = this.getPlayer();
+    currentPlayer &&
+      this.socket.send<GameActionDTO>(SOCKET_EVENTS.GAME_ACTION, {
+        player: username,
+        id: currentPlayer.id,
+        username: currentPlayer.username,
+        lobbyId: this.getLobbyId(),
+        action: GAME_ACTIONS.HEAL
+      });
   }
 
   public isDayPhase(): boolean {
@@ -40,7 +96,9 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
     return (
       this.isNightPhase() &&
       this.gameService.isAlive() &&
-      (player?.role === 'mafia' || player?.role === 'detective')
+      (player?.role === 'mafia' ||
+        player?.role === 'detective' ||
+        player?.role === 'don')
     );
   }
 
@@ -52,11 +110,32 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
     );
   }
 
+  public canCheck(): boolean {
+    return (
+      this.isNightPhase() &&
+      this.gameService.isAlive() &&
+      this.gameService.getPlayer()?.role === 'detective'
+    );
+  }
+
   public canVote(): boolean {
     return this.isDayPhase() && this.gameService.isAlive();
   }
 
   override ngOnDestroy(): void {
     super.ngOnDestroy();
+  }
+
+  public leaveLobby(lobbyId: string): void {
+    this.lobbyService.leaveLobby(lobbyId);
+    this.router.navigate(['/']);
+  }
+
+  public getLobbyId(): string {
+    return this.lobbyService.getCurrentLobby()?.id || '';
+  }
+
+  public getPlayer(): Player | null {
+    return this.gameService.getPlayer();
   }
 }

@@ -14,7 +14,7 @@ export class SocketService {
 
   constructor(private electronService: ElectronService) {}
 
-  connect() {
+  public connect() {
     if (!this.isConnected) {
       console.log('Connecting to socket');
       this.nodeWindow.socket?.connect();

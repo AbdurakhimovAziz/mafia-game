@@ -1,4 +1,4 @@
-import { GAME_ROLE_NAMES } from '../../constants';
+import { PlayerRoles } from '../../utils';
 import { ILobby } from '../lobby';
 import { IUser } from '../user';
 import { GameMessageDTO } from './socket-requests';
@@ -17,7 +17,12 @@ export interface LobbyLeftResponse {
 export interface LobbyJoinedResponse extends LobbyLeftResponse {}
 
 export interface GameStartResponse {
-  role: GAME_ROLE_NAMES;
+  role: PlayerRoles;
 }
 
 export interface GameMessageResponse extends GameMessageDTO {}
+
+export interface VoteResultResponse {
+  username: string;
+  role: PlayerRoles;
+}

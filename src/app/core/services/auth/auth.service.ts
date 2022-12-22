@@ -10,7 +10,7 @@ import { LoginRequest, RegisterRequest } from './types';
   providedIn: 'root'
 })
 export class AuthService {
-  private authUrl = `${BASE_URL}/auth`;
+  private authUrl = `${BASE_URL}`;
 
   // TODO: remove mock
   private mockUsers: IUser[] = [
@@ -40,11 +40,17 @@ export class AuthService {
     private router: Router
   ) {}
 
-  public register(user: RegisterRequest): void {
-    // this.http.post(`${this.authUrl}/register`, user).subscribe({
-    //   next: (res) => console.log(res),
-    //   error: (err) => console.log(err)
-    // });
+  public register(user: RegisterRequest) {
+    return this.http
+      .post(`${this.authUrl}/signup`, {
+        email: user.email,
+        username: user.username,
+        password: user.password
+      })
+      .subscribe({
+        next: (res) => console.log(res),
+        error: (err) => console.log(err)
+      });
 
     this.mockUsers.push({
       id: `${this.mockUsers.length + 1}`,
@@ -53,7 +59,7 @@ export class AuthService {
   }
 
   public login(user: LoginRequest): void {
-    // this.http.post(`${this.authUrl}/login`, user).subscribe({
+    // this.http.post(`${this.authUrl}/signin`, user).subscribe({
     //   next: (res) => {
     //     console.log(res);
     //   },
@@ -77,6 +83,7 @@ export class AuthService {
   }
 
   public logout(): void {
+    this.http.post(`${this.authUrl}/logout`, {}).subscribe({});
     this.userService.setUser(null);
     this.router.navigate(['auth/login']);
   }

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, timer } from 'rxjs';
-import { GAME_STATUS } from '../../constants';
+import { GAME_STATUS, PhaseTimes } from '../../constants';
 import { Player } from '../../models';
-import { GamePhases } from '../../utils';
+import { GamePhases, PlayerRoles } from '../../utils';
 import { LobbyService } from '../lobby/lobby.service';
 import { SocketService } from '../socket';
 
@@ -19,7 +19,7 @@ export class GameService {
   private player: Player | null = {
     id: '123',
     username: 'test',
-    role: 'doctor',
+    role: 'detective',
     isAlive: true
   };
 
@@ -30,15 +30,18 @@ export class GameService {
     this.gamePhase$.subscribe((phase) => {
       if (phase === 'day') {
         this.isDiscussionPhaseSubject.next(true);
-        timer(10000).subscribe(() => {
+        timer(PhaseTimes.DISCUSSION).subscribe(() => {
           this.isDiscussionPhaseSubject.next(false);
-          this.setGamePhase('night');
+          timer(PhaseTimes.VOTING).subscribe(() => {
+            this.setGamePhase('night');
+          });
         });
       }
 
       if (phase === 'night') {
-        timer(10000).subscribe(() => {
+        timer(PhaseTimes.NIGHT).subscribe(() => {
           this.setGamePhase('day');
+          this.isDiscussionPhaseSubject.next(true);
         });
       }
     });
@@ -78,5 +81,9 @@ export class GameService {
 
   public isNightPhase(): boolean {
     return this.gamePhase.getValue() === 'night';
+  }
+
+  public getRole(): PlayerRoles {
+    return this.player?.role || 'townie';
   }
 }

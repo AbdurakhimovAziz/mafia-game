@@ -22,4 +22,16 @@ export interface StartGameDTO {
 export interface GameMessageDTO extends Omit<Player, 'role'> {
   message: string;
   lobbyId: string;
+  isPrivate: boolean;
+}
+
+export interface VoteDTO extends Omit<Player, 'role'> {
+  lobbyId: string;
+  player: string;
+}
+
+export interface GameActionDTO extends Omit<Player, 'role'> {
+  lobbyId: string;
+  player: string;
+  action: string;
 }

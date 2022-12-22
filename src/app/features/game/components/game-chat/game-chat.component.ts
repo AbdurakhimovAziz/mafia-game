@@ -17,6 +17,7 @@ import {
   SocketService,
   UserService
 } from '../../../../core';
+import { GameService } from '../../../../core/services/game/game.service';
 import { LobbyService } from '../../../../core/services/lobby/lobby.service';
 import { GamePhases, SubscriptionDestroyer } from '../../../../core/utils';
 
@@ -44,6 +45,7 @@ export class GameChatComponent
     private socket: SocketService,
     private zone: NgZone,
     private lobbyService: LobbyService,
+    private gameService: GameService,
     private userService: UserService
   ) {
     super();
@@ -81,8 +83,10 @@ export class GameChatComponent
       ...messageFormValue,
       username: user.username,
       id: user.id,
-      lobbyId
+      lobbyId,
+      isPrivate: this.gameService.isNightPhase()
     };
+
     this.socket.send<GameMessageDTO>(SOCKET_EVENTS.GAME_MESSAGE, message);
     this.messagesSubject.next([...this.messagesSubject.getValue(), message]);
     this.messageForm.reset();
@@ -99,5 +103,12 @@ export class GameChatComponent
 
   public getMessages(): void {
     this.messagesSubject.getValue();
+  }
+
+  public cantWrite(): boolean {
+    return (
+      this.gameService.isNightPhase() &&
+      !(this.gameService.getRole() === 'mafia')
+    );
   }
 }
