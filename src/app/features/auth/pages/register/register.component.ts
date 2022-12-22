@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { CustomValidators, RegisterForm } from '../../utils';
-import { AuthService } from '../../../../core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../../core';
+import { CustomValidators, RegisterForm } from '../../utils';
 
 @Component({
   selector: 'app-register',
@@ -61,8 +61,8 @@ export class RegisterComponent {
     console.log(this.registerForm.value);
     this.isSubmitted = true;
     this.registerForm.markAsTouched();
-    this.registerForm.valid &&
-      this.auth.register(this.registerForm.getRawValue());
+    if (!this.registerForm.valid) return;
+    this.auth.register(this.registerForm.getRawValue());
     this.router.navigate(['/auth/login']);
   }
 

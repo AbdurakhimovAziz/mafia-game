@@ -11,7 +11,7 @@ import { SocketService } from '../socket';
 })
 export class GameService {
   public gameStatus: GAME_STATUS = GAME_STATUS.WAITING;
-  private gamePhase = new BehaviorSubject<GamePhases>('night');
+  private gamePhase = new BehaviorSubject<GamePhases>('day');
   public gamePhase$ = this.gamePhase.asObservable();
   private player: Player | null = {
     id: '123',

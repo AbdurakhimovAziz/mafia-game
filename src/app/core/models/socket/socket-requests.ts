@@ -1,3 +1,4 @@
+import { Player } from '../player';
 import { IUser } from '../user';
 
 export interface LobbyCreateDTO {
@@ -15,5 +16,10 @@ export interface LobbyJoinDTO {
 export interface LobbyLeaveDTO extends LobbyJoinDTO {}
 
 export interface StartGameDTO {
+  lobbyId: string;
+}
+
+export interface GameMessageDTO extends Omit<Player, 'role'> {
+  message: string;
   lobbyId: string;
 }

@@ -1,6 +1,7 @@
 import { GAME_ROLE_NAMES } from '../../constants';
 import { ILobby } from '../lobby';
 import { IUser } from '../user';
+import { GameMessageDTO } from './socket-requests';
 
 export interface LobbyCreateResponse extends ILobby {}
 
@@ -18,3 +19,5 @@ export interface LobbyJoinedResponse extends LobbyLeftResponse {}
 export interface GameStartResponse {
   role: GAME_ROLE_NAMES;
 }
+
+export interface GameMessageResponse extends GameMessageDTO {}
