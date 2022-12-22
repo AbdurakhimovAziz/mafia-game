@@ -1,12 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   GAME_ACTIONS,
   GameActionDTO,
+  MessageService,
   Player,
   SOCKET_EVENTS,
   SocketService,
-  VoteDTO
+  VoteDTO,
+  VoteResponse,
+  VoteResultResponse
 } from '../../../../core';
 import { GameService } from '../../../../core/services/game/game.service';
 import { LobbyService } from '../../../../core/services/lobby/lobby.service';
@@ -25,13 +28,40 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
   constructor(
     private gameService: GameService,
     private lobbyService: LobbyService,
+    private messageService: MessageService,
     private socket: SocketService,
-    private router: Router
+    private router: Router,
+    private zone: NgZone
   ) {
     super();
   }
 
   ngOnInit(): void {
+    this.addSubscription(
+      this.socket.on<VoteResponse>(SOCKET_EVENTS.GAME_VOTE).subscribe((res) => {
+        const data = res.data;
+        data &&
+          this.zone.run(() => {
+            this.messageService.addMessage({
+              message: `${data.username} voted for ${data.player}`
+            });
+          });
+      })
+    );
+
+    this.addSubscription(
+      this.socket
+        .on<VoteResultResponse>(SOCKET_EVENTS.GAME_VOTE)
+        .subscribe((res) => {
+          const data = res.data;
+          data &&
+            this.zone.run(() => {
+              this.messageService.addMessage({
+                message: `${data.username} was voted out. Player was a ${data.role}`
+              });
+            });
+        })
+    );
     // TODO: remove
     this.lobbyService.setCurrentLobby(mockLobby);
   }
@@ -45,6 +75,11 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
         username: currentPlayer.username,
         lobbyId: this.getLobbyId()
       });
+
+    //TODO: remove
+    this.messageService.addMessage({
+      message: `${currentPlayer?.username} voted for ${username}`
+    });
   }
 
   public kill(username: string): void {
@@ -92,13 +127,11 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
   }
 
   public canKill(): boolean {
-    const player = this.gameService.getPlayer();
+    const role = this.getRole();
     return (
       this.isNightPhase() &&
       this.gameService.isAlive() &&
-      (player?.role === 'mafia' ||
-        player?.role === 'detective' ||
-        player?.role === 'don')
+      (role === 'mafia' || role === 'detective' || role === 'don')
     );
   }
 
@@ -106,7 +139,7 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
     return (
       this.isNightPhase() &&
       this.gameService.isAlive() &&
-      this.gameService.getPlayer()?.role === 'doctor'
+      this.getRole() === 'doctor'
     );
   }
 
@@ -114,7 +147,7 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
     return (
       this.isNightPhase() &&
       this.gameService.isAlive() &&
-      this.gameService.getPlayer()?.role === 'detective'
+      this.getRole() === 'detective'
     );
   }
 
@@ -137,5 +170,9 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
 
   public getPlayer(): Player | null {
     return this.gameService.getPlayer();
+  }
+
+  public getRole(): string {
+    return this.gameService.getPlayer()?.role || '';
   }
 }

@@ -9,8 +9,13 @@
       class="flex flex-col justify-end mt-auto"
       *ngIf="messages$ | async as messages">
       <li class="flex space-x-5" *ngFor="let message of messages">
-        <span> {{ message.username }}: </span>
-        <span> {{ message.message }} </span>
+        <span *ngIf="message.username"> {{ message.username }}: </span>
+        <span
+          [ngClass]="{
+            'text-amber-300': !message.username
+          }">
+          {{ message.message }}
+        </span>
       </li>
     </ul>
   </div>

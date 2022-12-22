@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { AuthService } from '../../../../core';
 import { CustomValidators, RegisterForm } from '../../utils';
 
@@ -35,7 +34,7 @@ export class RegisterComponent {
     [CustomValidators.MatchValidator('password', 'confirmPassword')]
   );
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService) {}
 
   public get email() {
     return this.registerForm.get('email');
@@ -63,7 +62,6 @@ export class RegisterComponent {
     this.registerForm.markAsTouched();
     if (!this.registerForm.valid) return;
     this.auth.register(this.registerForm.getRawValue());
-    this.router.navigate(['/auth/login']);
   }
 
   public togglePasswordVisibility() {

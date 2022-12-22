@@ -5,7 +5,8 @@ import { GameMessageDTO } from './socket-requests';
 
 export interface LobbyCreateResponse extends ILobby {}
 
-export interface LobbyJoinResponse extends ILobby {}
+export interface LobbyJoinResponse extends ILobby {
+}
 
 export type LobbyLeaveResponse = string;
 
@@ -14,13 +15,20 @@ export interface LobbyLeftResponse {
   username: string;
 }
 
-export interface LobbyJoinedResponse extends LobbyLeftResponse {}
+export interface LobbyJoinedResponse extends LobbyLeftResponse {
+}
 
 export interface GameStartResponse {
   role: PlayerRoles;
 }
 
-export interface GameMessageResponse extends GameMessageDTO {}
+export interface GameMessageResponse extends GameMessageDTO {
+}
+
+export interface VoteResponse {
+  player: string;
+  username: string;
+}
 
 export interface VoteResultResponse {
   username: string;

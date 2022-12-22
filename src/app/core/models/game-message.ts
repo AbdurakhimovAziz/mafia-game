@@ -1,5 +1,5 @@
 export type GameMessage = {
   message: string;
-  username: string;
+  username?: string;
   isPrivate?: boolean;
 };

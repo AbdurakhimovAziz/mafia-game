@@ -41,41 +41,44 @@ export class AuthService {
   ) {}
 
   public register(user: RegisterRequest) {
-    return this.http
+    this.http
       .post(`${this.authUrl}/signup`, {
         email: user.email,
         username: user.username,
         password: user.password
       })
       .subscribe({
-        next: (res) => console.log(res),
+        next: (res) => {
+          console.log(res);
+          this.router.navigate(['/auth/login']);
+        },
         error: (err) => console.log(err)
       });
-
-    this.mockUsers.push({
-      id: `${this.mockUsers.length + 1}`,
-      ...user
-    });
+    // this.mockUsers.push({
+    //   id: `${this.mockUsers.length + 1}`,
+    //   ...user
+    // });
   }
 
-  public login(user: LoginRequest): void {
-    // this.http.post(`${this.authUrl}/signin`, user).subscribe({
-    //   next: (res) => {
-    //     console.log(res);
-    //   },
-    //   error: (err) => console.log(err)
-    // });
-
-    this.mockUsers.forEach((mockUser) => {
-      if (
-        mockUser.username === user.username &&
-        mockUser.password === user.password
-      ) {
-        console.log('User found');
-        this.userService.setUser(mockUser);
+  public login(user: LoginRequest) {
+    this.http.post(`${this.authUrl}/signin`, user).subscribe({
+      next: (res) => {
+        console.log(res);
         this.router.navigate(['/']);
-      }
+      },
+      error: (err) => console.log(err)
     });
+
+    // this.mockUsers.forEach((mockUser) => {
+    //   if (
+    //     mockUser.username === user.username &&
+    //     mockUser.password === user.password
+    //   ) {
+    //     console.log('User found');
+    //     this.userService.setUser(mockUser);
+    //     this.router.navigate(['/']);
+    //   }
+    // });
   }
 
   public isLoggedIn(): boolean {

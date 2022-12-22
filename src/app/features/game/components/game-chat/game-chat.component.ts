@@ -8,11 +8,11 @@ import {
   ViewChild
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
 import {
   GameMessage,
   GameMessageDTO,
   GameMessageResponse,
+  MessageService,
   SOCKET_EVENTS,
   SocketService,
   UserService
@@ -37,16 +37,16 @@ export class GameChatComponent
       validators: Validators.required
     })
   });
+  public messages$ = this.messageService.messages$;
   @ViewChild('scroll') private scrollContainer!: ElementRef;
-  private messagesSubject = new BehaviorSubject<GameMessage[]>([]);
-  public messages$ = this.messagesSubject.asObservable();
 
   constructor(
     private socket: SocketService,
     private zone: NgZone,
     private lobbyService: LobbyService,
     private gameService: GameService,
-    private userService: UserService
+    private userService: UserService,
+    private messageService: MessageService
   ) {
     super();
   }
@@ -58,14 +58,11 @@ export class GameChatComponent
         .subscribe((response) => {
           this.zone.run(() => {
             const data = response.data;
-            data &&
-              this.messagesSubject.next([
-                ...this.messagesSubject.getValue(),
-                {
-                  message: data.message,
-                  username: data.username
-                }
-              ]);
+            const message: GameMessage = {
+              message: data?.message || '',
+              username: data?.username
+            };
+            this.messageService.addMessage(message);
 
             console.log('game message', response);
           });
@@ -88,7 +85,7 @@ export class GameChatComponent
     };
 
     this.socket.send<GameMessageDTO>(SOCKET_EVENTS.GAME_MESSAGE, message);
-    this.messagesSubject.next([...this.messagesSubject.getValue(), message]);
+    this.messageService.addMessage(message);
     this.messageForm.reset();
   }
 
@@ -96,19 +93,15 @@ export class GameChatComponent
     this.scrollToBottom();
   }
 
-  scrollToBottom(): void {
-    const container = this.scrollContainer.nativeElement;
-    container.scrollTop = container.scrollHeight;
-  }
-
-  public getMessages(): void {
-    this.messagesSubject.getValue();
-  }
-
   public cantWrite(): boolean {
     return (
       this.gameService.isNightPhase() &&
       !(this.gameService.getRole() === 'mafia')
     );
+  }
+
+  private scrollToBottom(): void {
+    const container = this.scrollContainer.nativeElement;
+    container.scrollTop = container.scrollHeight;
   }
 }

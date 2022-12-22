@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, timer } from 'rxjs';
-import { GAME_STATUS, PhaseTimes } from '../../constants';
-import { Player } from '../../models';
+import { GAME_STATUS, PhaseTimes, SOCKET_EVENTS } from '../../constants';
+import { ILobby, Player } from '../../models';
 import { GamePhases, PlayerRoles } from '../../utils';
 import { LobbyService } from '../lobby/lobby.service';
 import { SocketService } from '../socket';
@@ -34,6 +34,10 @@ export class GameService {
           this.isDiscussionPhaseSubject.next(false);
           timer(PhaseTimes.VOTING).subscribe(() => {
             this.setGamePhase('night');
+            this.socket.send<string>(
+              SOCKET_EVENTS.GAME_VOTE_RESULT,
+              this.getLobbyId()
+            );
           });
         });
       }
@@ -42,6 +46,10 @@ export class GameService {
         timer(PhaseTimes.NIGHT).subscribe(() => {
           this.setGamePhase('day');
           this.isDiscussionPhaseSubject.next(true);
+          this.socket.send<string>(
+            SOCKET_EVENTS.GAME_ACTION_RESULT,
+            this.getLobbyId()
+          );
         });
       }
     });
@@ -85,5 +93,13 @@ export class GameService {
 
   public getRole(): PlayerRoles {
     return this.player?.role || 'townie';
+  }
+
+  public getLobby(): ILobby | null {
+    return this.lobbyService.getCurrentLobby();
+  }
+
+  public getLobbyId(): string {
+    return this.getLobby()?.id || '';
   }
 }

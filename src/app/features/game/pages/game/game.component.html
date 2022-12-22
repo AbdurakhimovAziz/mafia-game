@@ -22,6 +22,17 @@
         <p class="flex items-center justify-between">
           Phase: <span> {{ gamePhase }} </span>
         </p>
+        <p class="flex items-center justify-between">
+          Your role:
+          <span class="text-center">
+            <img
+              class="mx-auto"
+              *ngIf="getRole()"
+              [src]="'assets/roles/' + getRole() + '.png'"
+              alt="role" />
+            {{ getRole() }}
+          </span>
+        </p>
         <div class="">
           <p class="mb-10">Players:</p>
           <ul>

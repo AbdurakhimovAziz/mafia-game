@@ -1,10 +1,5 @@
-import {contextBridge, ipcRenderer} from 'electron';
-import {IPC_MESSAGES} from './utils';
-
-// contextBridge.exposeInMainWorld('electronAPI', {
-//   send: (msg) => ipcRenderer.send(IPC_MESSAGES.MESSAGE, msg),
-//   on: (event, cb) => ipcRenderer.on(event, cb)
-// });
+import { contextBridge, ipcRenderer } from 'electron';
+import { IPC_MESSAGES } from './utils';
 
 contextBridge.exposeInMainWorld('socket', {
   connect: () => ipcRenderer.invoke(IPC_MESSAGES.SOCKET_CONNECT),
