@@ -35,6 +35,27 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
     return this.gameService.isNightPhase();
   }
 
+  public canKill(): boolean {
+    const player = this.gameService.getPlayer();
+    return (
+      this.isNightPhase() &&
+      this.gameService.isAlive() &&
+      (player?.role === 'mafia' || player?.role === 'detective')
+    );
+  }
+
+  public canHeal(): boolean {
+    return (
+      this.isNightPhase() &&
+      this.gameService.isAlive() &&
+      this.gameService.getPlayer()?.role === 'doctor'
+    );
+  }
+
+  public canVote(): boolean {
+    return this.isDayPhase() && this.gameService.isAlive();
+  }
+
   override ngOnDestroy(): void {
     super.ngOnDestroy();
   }

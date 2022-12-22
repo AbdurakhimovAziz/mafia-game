@@ -38,12 +38,19 @@ body {
 }
 
 .btn {
+  @apply rounded-3xl px-5 py-2;
   &:disabled {
     cursor: not-allowed;
     opacity: 0.5;
   }
 
-  @apply rounded-3xl px-5 py-2;
+  &-action {
+    @apply bg-white rounded-3xl px-2 text-black text-sm;
+    &.red {
+      @apply text-red-500;
+    }
+  }
+
   &-primary {
     background-color: rgba(209, 17, 87, 0.4);
     @apply block w-full rounded-3xl px-5 py-3 text-sm font-medium text-white uppercase;

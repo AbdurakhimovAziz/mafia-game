@@ -11,7 +11,7 @@ import { SocketService } from '../socket';
 })
 export class GameService {
   public gameStatus: GAME_STATUS = GAME_STATUS.WAITING;
-  private gamePhase = new BehaviorSubject<GamePhases>('night');
+  private gamePhase = new BehaviorSubject<GamePhases>('day');
   public gamePhase$ = this.gamePhase.asObservable();
   private isDiscussionPhaseSubject = new BehaviorSubject<boolean>(false);
   public isDiscussionPhase$ = this.isDiscussionPhaseSubject.asObservable();
@@ -19,7 +19,8 @@ export class GameService {
   private player: Player | null = {
     id: '123',
     username: 'test',
-    role: 'mafia'
+    role: 'doctor',
+    isAlive: true
   };
 
   constructor(
@@ -29,8 +30,16 @@ export class GameService {
     this.gamePhase$.subscribe((phase) => {
       if (phase === 'day') {
         this.isDiscussionPhaseSubject.next(true);
-        timer(10000).subscribe(() => {});
-        this.isDiscussionPhaseSubject.next(true);
+        timer(10000).subscribe(() => {
+          this.isDiscussionPhaseSubject.next(false);
+          this.setGamePhase('night');
+        });
+      }
+
+      if (phase === 'night') {
+        timer(10000).subscribe(() => {
+          this.setGamePhase('day');
+        });
       }
     });
   }
@@ -47,8 +56,16 @@ export class GameService {
     return this.player;
   }
 
+  public setGamePhase(phase: GamePhases) {
+    this.gamePhase.next(phase);
+  }
+
   public socketConnect() {
     this.socket.connect();
+  }
+
+  public isAlive(): boolean {
+    return this.player?.isAlive || false;
   }
 
   public socketDisconnect() {
