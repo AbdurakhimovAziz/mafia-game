@@ -43,9 +43,9 @@
                 <span class="mr-5"> {{ i + 1 }}. </span>
                 {{ player.username }}
               </p>
-              <div class="flex space-x-2">
+              <div class="flex space-x-2" *ngIf="!isMe(player.username)">
                 <button
-                  class="btn-action red"
+                  class="btn-action"
                   *ngIf="canVote()"
                   (click)="vote(player.username)">
                   Vote
@@ -63,7 +63,7 @@
                   Kill
                 </button>
                 <button
-                  class="btn-action red"
+                  class="btn-action"
                   *ngIf="canHeal()"
                   (click)="heal(player.username)">
                   Heal

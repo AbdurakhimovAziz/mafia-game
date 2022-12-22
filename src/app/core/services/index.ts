@@ -4,3 +4,4 @@ export * from './socket';
 export * from './user';
 export * from './lobby';
 export * from './message';
+export * from './game';

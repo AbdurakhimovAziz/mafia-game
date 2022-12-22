@@ -2,18 +2,19 @@ import { Component, NgZone, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   GAME_ACTIONS,
+  GAME_ROLE_NAMES,
   GameActionDTO,
+  GameService,
+  LobbyService,
   MessageService,
   Player,
   SOCKET_EVENTS,
   SocketService,
+  SubscriptionDestroyer,
   VoteDTO,
   VoteResponse,
   VoteResultResponse
 } from '../../../../core';
-import { GameService } from '../../../../core/services/game/game.service';
-import { LobbyService } from '../../../../core/services/lobby/lobby.service';
-import { SubscriptionDestroyer } from '../../../../core/utils';
 import { mockLobby } from '../../../lobby/utils';
 
 @Component({
@@ -37,6 +38,8 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
   }
 
   ngOnInit(): void {
+    this.gameService.startGame();
+
     this.addSubscription(
       this.socket.on<VoteResponse>(SOCKET_EVENTS.GAME_VOTE).subscribe((res) => {
         const data = res.data;
@@ -76,7 +79,7 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
         lobbyId: this.getLobbyId()
       });
 
-    //TODO: remove
+    // TODO: remove
     this.messageService.addMessage({
       message: `${currentPlayer?.username} voted for ${username}`
     });
@@ -131,7 +134,9 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
     return (
       this.isNightPhase() &&
       this.gameService.isAlive() &&
-      (role === 'mafia' || role === 'detective' || role === 'don')
+      (role === GAME_ROLE_NAMES.MAFIA ||
+        role === GAME_ROLE_NAMES.DETECTIVE ||
+        role === GAME_ROLE_NAMES.DON)
     );
   }
 
@@ -153,6 +158,11 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
 
   public canVote(): boolean {
     return this.isDayPhase() && this.gameService.isAlive();
+  }
+
+  public isMe(username: string): boolean {
+    console.log(username, this.gameService.getPlayer()?.username);
+    return this.getPlayer()?.username === username;
   }
 
   override ngOnDestroy(): void {

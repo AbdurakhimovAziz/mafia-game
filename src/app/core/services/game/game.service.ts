@@ -18,7 +18,7 @@ export class GameService {
 
   private player: Player | null = {
     id: '123',
-    username: 'test',
+    username: 'example',
     role: 'detective',
     isAlive: true
   };
@@ -30,14 +30,18 @@ export class GameService {
     this.gamePhase$.subscribe((phase) => {
       if (phase === 'day') {
         this.isDiscussionPhaseSubject.next(true);
+
         timer(PhaseTimes.DISCUSSION).subscribe(() => {
           this.isDiscussionPhaseSubject.next(false);
+
           timer(PhaseTimes.VOTING).subscribe(() => {
             this.setGamePhase('night');
-            this.socket.send<string>(
-              SOCKET_EVENTS.GAME_VOTE_RESULT,
-              this.getLobbyId()
-            );
+
+            this.isHost() &&
+              this.socket.send<string>(
+                SOCKET_EVENTS.GAME_VOTE_RESULT,
+                this.getLobbyId()
+              );
           });
         });
       }
@@ -46,13 +50,19 @@ export class GameService {
         timer(PhaseTimes.NIGHT).subscribe(() => {
           this.setGamePhase('day');
           this.isDiscussionPhaseSubject.next(true);
-          this.socket.send<string>(
-            SOCKET_EVENTS.GAME_ACTION_RESULT,
-            this.getLobbyId()
-          );
+
+          this.isHost() &&
+            this.socket.send<string>(
+              SOCKET_EVENTS.GAME_ACTION_RESULT,
+              this.getLobbyId()
+            );
         });
       }
     });
+  }
+
+  public isHost(): boolean {
+    return this.getLobby()?.host === this.player?.username;
   }
 
   public startGame() {
