@@ -61,25 +61,30 @@ export class AuthService {
   }
 
   public login(user: LoginRequest) {
-    this.http.post(`${this.authUrl}/signin`, user).subscribe({
-      next: (res) => {
-        console.log(res);
-        // this.userService.setUser(user);
-        this.router.navigate(['/']);
-      },
-      error: (err) => console.log(err)
-    });
+    this.http
+      .post<{ message: string; user_info: IUser[] }>(
+        `${this.authUrl}/signin`,
+        user
+      )
+      .subscribe({
+        next: (res) => {
+          console.log(res.user_info);
+          this.userService.setUser(res.user_info[0]);
+          this.router.navigate(['/']);
+        },
+        error: (err) => console.log(err)
+      });
 
-    this.mockUsers.forEach((mockUser) => {
-      if (
-        mockUser.username === user.username &&
-        mockUser.password === user.password
-      ) {
-        console.log('User found');
-        this.userService.setUser(mockUser);
-        this.router.navigate(['/']);
-      }
-    });
+    // this.mockUsers.forEach((mockUser) => {
+    //   if (
+    //     mockUser.username === user.username &&
+    //     mockUser.password === user.password
+    //   ) {
+    //     console.log('User found');
+    //     this.userService.setUser(mockUser);
+    //     this.router.navigate(['/']);
+    //   }
+    // });
   }
 
   public isLoggedIn(): boolean {
