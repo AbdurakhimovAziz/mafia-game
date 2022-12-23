@@ -33,11 +33,6 @@ export const mockLobby: ILobby = {
       id: '123',
       username: 'player 5',
       isAlive: true
-    },
-    {
-      id: '123',
-      username: 'player 6',
-      isAlive: true
     }
   ],
   host: 'example',

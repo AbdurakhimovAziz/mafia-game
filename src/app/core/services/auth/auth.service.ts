@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BASE_URL } from '../../api';
 import { IUser } from '../../models';
+import { LobbyService } from '../lobby';
 import { UserService } from '../user';
 import { LoginRequest, RegisterRequest } from './types';
 
@@ -37,6 +38,7 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private userService: UserService,
+    private lobbyService: LobbyService,
     private router: Router
   ) {}
 
@@ -70,6 +72,12 @@ export class AuthService {
         next: (res) => {
           console.log(res.user_info);
           this.userService.setUser(res.user_info[0]);
+          this.lobbyService.addPlayerToLobby({
+            id: res.user_info[0].id,
+            username: res.user_info[0].username,
+            role: 'mafia',
+            isAlive: true
+          });
           this.router.navigate(['/']);
         },
         error: (err) => console.log(err)

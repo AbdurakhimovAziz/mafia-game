@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { mockLobby } from '../../../features/lobby/utils';
 import { SOCKET_EVENTS } from '../../constants';
 import {
   ILobby,
@@ -56,11 +57,14 @@ export class LobbyService {
   }
 
   public addPlayerToLobby(player: Player) {
+    mockLobby.players?.push(player);
+    mockLobby.host = player.username;
     const currentLobby = this.getCurrentLobby();
-    if (currentLobby) {
-      currentLobby.players?.push(player);
-      this.setCurrentLobby(currentLobby);
-    }
+    // if (currentLobby) {
+    //   currentLobby.players?.push(player);
+    //   this.setCurrentLobby(currentLobby);
+    // }
+    this.setCurrentLobby(mockLobby);
   }
 
   public removePlayerFromLobby(playerId: string) {
