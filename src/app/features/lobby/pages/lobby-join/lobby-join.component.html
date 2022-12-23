@@ -7,6 +7,7 @@
         <mat-icon>refresh</mat-icon>
       </button>
     </div>
+    <div *ngIf="lobbies.length === 0">No lobbies</div>
     <ul>
       <li
         class="flex justify-between space-x-10 items-center border-b-2 border-white py-2 mb-5"
