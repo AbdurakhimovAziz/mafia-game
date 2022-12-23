@@ -7,7 +7,6 @@ import {
   SocketService,
   SubscriptionDestroyer
 } from '../../../../core';
-import { mockLobby } from '../../utils';
 
 @Component({
   selector: 'app-lobby-join',
@@ -18,7 +17,7 @@ export class LobbyJoinComponent
   extends SubscriptionDestroyer
   implements OnInit, OnDestroy
 {
-  public lobbies: ILobby[] = [mockLobby, mockLobby, mockLobby];
+  public lobbies: ILobby[] = [];
 
   constructor(
     private socket: SocketService,

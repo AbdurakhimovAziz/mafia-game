@@ -2,6 +2,9 @@
   <div
     class="absolute left-36 top-1/2 max-w-[250px] w-full p-10 bg-gray-300 bg-opacity-50 rounded-xl text-center -translate-y-1/2">
     <div class="text-2xl text-teal-300 mb-10">{{ username }}</div>
+    <div class="mb-10">
+      <button class="btn btn-action" (click)="reconnect()">Reconnect</button>
+    </div>
     <button class="btn btn-tertiary" (click)="logout()">Log out</button>
   </div>
   <div

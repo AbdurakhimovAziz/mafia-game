@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService, UserService } from 'src/app/core';
+import { AuthService, SocketService, UserService } from 'src/app/core';
 
 @Component({
   selector: 'app-home',
@@ -7,7 +7,11 @@ import { AuthService, UserService } from 'src/app/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  constructor(private userService: UserService, private auth: AuthService) {}
+  constructor(
+    private userService: UserService,
+    private auth: AuthService,
+    private socket: SocketService
+  ) {}
 
   public get username(): string {
     return this.userService.getUser()?.username || '';
@@ -15,5 +19,9 @@ export class HomeComponent {
 
   public logout(): void {
     this.auth.logout();
+  }
+
+  public reconnect(): void {
+    this, this.socket.reconnect();
   }
 }

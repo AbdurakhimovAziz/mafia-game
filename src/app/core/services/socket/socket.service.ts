@@ -52,4 +52,9 @@ export class SocketService {
       this.isConnected = false;
     }
   }
+
+  public reconnect() {
+    this.disconnect();
+    this.connect();
+  }
 }
