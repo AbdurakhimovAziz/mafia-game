@@ -12,14 +12,15 @@ import {
   GameMessage,
   GameMessageDTO,
   GameMessageResponse,
+  GamePhases,
+  GameService,
+  LobbyService,
   MessageService,
   SOCKET_EVENTS,
   SocketService,
+  SubscriptionDestroyer,
   UserService
 } from '../../../../core';
-import { GameService } from '../../../../core/services/game/game.service';
-import { LobbyService } from '../../../../core/services/lobby/lobby.service';
-import { GamePhases, SubscriptionDestroyer } from '../../../../core/utils';
 
 @Component({
   selector: 'app-game-chat',

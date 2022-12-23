@@ -13,28 +13,6 @@ import { LoginRequest, RegisterRequest } from './types';
 export class AuthService {
   private authUrl = `${BASE_URL}`;
 
-  // TODO: remove mock
-  private mockUsers: IUser[] = [
-    {
-      id: '1',
-      email: 'example@mail.com',
-      username: 'example',
-      password: '12345678'
-    },
-    {
-      id: '2',
-      email: 'example2@mail.com',
-      username: 'example2',
-      password: '12345678'
-    },
-    {
-      id: '3',
-      email: 'example3@mail.com',
-      username: 'example3',
-      password: '12345678'
-    }
-  ];
-
   constructor(
     private http: HttpClient,
     private userService: UserService,
@@ -56,10 +34,6 @@ export class AuthService {
         },
         error: (err) => console.log(err)
       });
-    // this.mockUsers.push({
-    //   id: `${this.mockUsers.length + 1}`,
-    //   ...user
-    // });
   }
 
   public login(user: LoginRequest) {
@@ -82,17 +56,6 @@ export class AuthService {
         },
         error: (err) => console.log(err)
       });
-
-    // this.mockUsers.forEach((mockUser) => {
-    //   if (
-    //     mockUser.username === user.username &&
-    //     mockUser.password === user.password
-    //   ) {
-    //     console.log('User found');
-    //     this.userService.setUser(mockUser);
-    //     this.router.navigate(['/']);
-    //   }
-    // });
   }
 
   public isLoggedIn(): boolean {
