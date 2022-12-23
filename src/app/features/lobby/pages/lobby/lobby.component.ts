@@ -1,18 +1,18 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+  GameService,
   GameStartResponse,
   LobbyJoinedResponse,
   LobbyJoinResponse,
   LobbyLeftResponse,
+  LobbyService,
   SOCKET_EVENTS,
   SocketService,
   StartGameDTO,
+  SubscriptionDestroyer,
   UserService
 } from '../../../../core';
-import { GameService } from '../../../../core/services/game/game.service';
-import { LobbyService } from '../../../../core/services/lobby/lobby.service';
-import { SubscriptionDestroyer } from '../../../../core/utils';
 import { mockLobby } from '../../utils';
 
 @Component({
@@ -90,6 +90,7 @@ export class LobbyComponent
                 ...response.data,
                 isAlive: true
               });
+
               this.router.navigate(['game']);
             }
           });
@@ -105,7 +106,7 @@ export class LobbyComponent
   }
 
   public isHost(username: string): boolean {
-    return username === this.userService.getUser()?.username;
+    return username === this.lobbyService.getCurrentLobby()?.host;
   }
 
   public startGame() {

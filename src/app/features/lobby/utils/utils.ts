@@ -12,7 +12,8 @@ export const mockLobby: ILobby = {
     {
       id: '123',
       username: 'player 2',
-      isAlive: true
+      isAlive: false,
+      role: 'mafia'
     },
     {
       id: '123',
@@ -32,6 +33,11 @@ export const mockLobby: ILobby = {
     {
       id: '123',
       username: 'player 5',
+      isAlive: true
+    },
+    {
+      id: '123',
+      username: 'player 6',
       isAlive: true
     }
   ],

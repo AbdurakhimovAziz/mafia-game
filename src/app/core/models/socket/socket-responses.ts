@@ -1,5 +1,6 @@
 import { PlayerRoles } from '../../utils';
 import { ILobby } from '../lobby';
+import { Ally } from '../player';
 import { IUser } from '../user';
 import { GameMessageDTO } from './socket-requests';
 
@@ -18,6 +19,7 @@ export interface LobbyJoinedResponse extends LobbyLeftResponse {}
 
 export interface GameStartResponse {
   role: PlayerRoles;
+  allies?: Ally[];
 }
 
 export interface GameMessageResponse extends GameMessageDTO {}

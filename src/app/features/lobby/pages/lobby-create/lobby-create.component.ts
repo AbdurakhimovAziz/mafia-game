@@ -3,12 +3,12 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
   LobbyCreateResponse,
+  LobbyService,
   SOCKET_EVENTS,
   SocketService,
+  SubscriptionDestroyer,
   UserService
 } from '../../../../core';
-import { LobbyService } from '../../../../core/services/lobby/lobby.service';
-import { SubscriptionDestroyer } from '../../../../core/utils';
 import { LobbyForm, mockLobby } from '../../utils';
 
 @Component({

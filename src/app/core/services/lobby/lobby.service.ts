@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { mockLobby } from '../../../features/lobby/utils';
 import { SOCKET_EVENTS } from '../../constants';
 import {
   ILobby,
@@ -9,6 +8,7 @@ import {
   LobbyLeaveDTO,
   Player
 } from '../../models';
+import { PlayerRoles } from '../../utils';
 import { SocketService } from '../socket';
 import { UserService } from '../user';
 
@@ -57,14 +57,17 @@ export class LobbyService {
   }
 
   public addPlayerToLobby(player: Player) {
-    mockLobby.players?.push(player);
-    mockLobby.host = player.username;
+    // TODO: remove mock
+    // mockLobby.players?.push(player);
+    // mockLobby.host = player.username;
+
     const currentLobby = this.getCurrentLobby();
-    // if (currentLobby) {
-    //   currentLobby.players?.push(player);
-    //   this.setCurrentLobby(currentLobby);
-    // }
-    this.setCurrentLobby(mockLobby);
+    if (currentLobby) {
+      currentLobby.players?.push(player);
+      this.setCurrentLobby(currentLobby);
+    }
+
+    // this.setCurrentLobby(mockLobby);
   }
 
   public removePlayerFromLobby(playerId: string) {
@@ -83,5 +86,18 @@ export class LobbyService {
 
   public getCurrentLobby() {
     return this.currentLobby.value;
+  }
+
+  public revealRole(username: string, role: PlayerRoles) {
+    const currentLobby = this.getCurrentLobby();
+    if (currentLobby) {
+      const player = currentLobby.players?.find(
+        (player) => player.username === username
+      );
+      if (player) {
+        player.role = role;
+        this.setCurrentLobby(currentLobby);
+      }
+    }
   }
 }

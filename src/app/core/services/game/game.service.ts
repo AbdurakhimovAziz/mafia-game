@@ -11,7 +11,7 @@ import { SocketService } from '../socket';
 })
 export class GameService {
   public gameStatus: GAME_STATUS = GAME_STATUS.WAITING;
-  private gamePhase = new BehaviorSubject<GamePhases>('day');
+  private gamePhase = new BehaviorSubject<GamePhases>('night');
   public gamePhase$ = this.gamePhase.asObservable();
   private healedMyself = false;
   private isDiscussionPhaseSubject = new BehaviorSubject<boolean>(false);
@@ -19,9 +19,15 @@ export class GameService {
 
   private player: Player | null = {
     id: '123',
-    username: 'example',
-    role: 'mafia',
-    isAlive: true
+    username: 'Aziz',
+    role: 'doctor',
+    isAlive: true,
+    allies: [
+      {
+        username: 'player 1',
+        role: 'mafia'
+      }
+    ]
   };
 
   constructor(
@@ -60,10 +66,18 @@ export class GameService {
         });
       }
     });
+
+    this.revealAllyRoles(this.player!);
   }
 
   public amIHost(): boolean {
     return this.getLobby()?.host === this.player?.username;
+  }
+
+  public isAlly(username: string): boolean {
+    return (
+      this.player?.allies?.some((ally) => ally.username === username) || false
+    );
   }
 
   public startGame() {
@@ -71,7 +85,16 @@ export class GameService {
   }
 
   public setPlayer(player: Player) {
+    this.revealAllyRoles(player);
     this.player = player;
+  }
+
+  public revealAllyRoles(player: Player) {
+    console.log(this.player, this.getLobby());
+    (player.role === 'don' || player.role === 'mafia') &&
+      player?.allies?.forEach((ally) => {
+        this.lobbyService.revealRole(ally.username, ally.role!);
+      });
   }
 
   public getPlayer() {
@@ -87,7 +110,6 @@ export class GameService {
   }
 
   public amIAlive(): boolean {
-    console.log(this.player?.isAlive);
     return this.player?.isAlive || false;
   }
 

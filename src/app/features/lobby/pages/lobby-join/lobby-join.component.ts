@@ -1,8 +1,12 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ILobby, SOCKET_EVENTS, SocketService } from '../../../../core';
-import { LobbyService } from '../../../../core/services/lobby/lobby.service';
-import { SubscriptionDestroyer } from '../../../../core/utils';
+import {
+  ILobby,
+  LobbyService,
+  SOCKET_EVENTS,
+  SocketService,
+  SubscriptionDestroyer
+} from '../../../../core';
 import { mockLobby } from '../../utils';
 
 @Component({

@@ -1,6 +1,6 @@
 export const PhaseTimes = {
   DAY: 10000,
-  NIGHT: 30000,
-  DISCUSSION: 30000,
-  VOTING: 30000
+  NIGHT: 10000,
+  DISCUSSION: 10000,
+  VOTING: 10000
 };

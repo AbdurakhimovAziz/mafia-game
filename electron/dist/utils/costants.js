@@ -11,6 +11,6 @@ var IPC_MESSAGES;
     IPC_MESSAGES["SOCKET_ERROR"] = "socket-error";
 })(IPC_MESSAGES = exports.IPC_MESSAGES || (exports.IPC_MESSAGES = {}));
 exports.SOCKET = {
-    port: 8080,
+    port: 8000,
     host: '192.168.21.222'
 };

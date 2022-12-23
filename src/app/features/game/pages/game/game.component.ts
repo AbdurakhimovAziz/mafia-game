@@ -62,11 +62,16 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
               this.messageService.addMessage({
                 message: `${data.username} was voted out. Player was a ${data.role}`
               });
+
+              this.lobbyService.revealRole(data.username, data.role);
             });
         })
     );
+
     // TODO: remove
     this.lobbyService.setCurrentLobby(mockLobby);
+    console.log(this.lobbyService.getCurrentLobby());
+    // this.gameService.revealAllyRoles();
   }
 
   public vote(username: string): void {
@@ -134,6 +139,7 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
     const role = this.getRole();
     return (
       !this.isMe(username) &&
+      !this.gameService.isAlly(username) &&
       this.isNightPhase() &&
       (role === GAME_ROLE_NAMES.MAFIA ||
         role === GAME_ROLE_NAMES.DETECTIVE ||
@@ -161,6 +167,10 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
 
   public canVote(username: string): boolean {
     return !this.isMe(username) && this.isDayPhase();
+  }
+
+  public isAlly(username: string): boolean {
+    return this.gameService.isAlly(username);
   }
 
   public isMe(username: string): boolean {
