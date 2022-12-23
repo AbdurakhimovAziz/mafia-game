@@ -8,6 +8,6 @@ export enum IPC_MESSAGES {
 }
 
 export const SOCKET = {
-  port: 8080,
+  port: 8000,
   host: '192.168.21.222'
 };
