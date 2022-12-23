@@ -19,18 +19,18 @@ export interface StartGameDTO {
   lobbyId: string;
 }
 
-export interface GameMessageDTO extends Omit<Player, 'role'> {
+export interface GameMessageDTO extends Omit<Player, 'role' | 'isAlive'> {
   message: string;
   lobbyId: string;
   isPrivate: boolean;
 }
 
-export interface VoteDTO extends Omit<Player, 'role'> {
+export interface VoteDTO extends Omit<Player, 'role' | 'isAlive'> {
   lobbyId: string;
   player: string;
 }
 
-export interface GameActionDTO extends Omit<Player, 'role'> {
+export interface GameActionDTO extends Omit<Player, 'role' | 'isAlive'> {
   lobbyId: string;
   player: string;
   action: string;

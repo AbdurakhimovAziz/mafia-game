@@ -64,21 +64,22 @@ export class AuthService {
     this.http.post(`${this.authUrl}/signin`, user).subscribe({
       next: (res) => {
         console.log(res);
+        // this.userService.setUser(user);
         this.router.navigate(['/']);
       },
       error: (err) => console.log(err)
     });
 
-    // this.mockUsers.forEach((mockUser) => {
-    //   if (
-    //     mockUser.username === user.username &&
-    //     mockUser.password === user.password
-    //   ) {
-    //     console.log('User found');
-    //     this.userService.setUser(mockUser);
-    //     this.router.navigate(['/']);
-    //   }
-    // });
+    this.mockUsers.forEach((mockUser) => {
+      if (
+        mockUser.username === user.username &&
+        mockUser.password === user.password
+      ) {
+        console.log('User found');
+        this.userService.setUser(mockUser);
+        this.router.navigate(['/']);
+      }
+    });
   }
 
   public isLoggedIn(): boolean {
@@ -86,7 +87,6 @@ export class AuthService {
   }
 
   public logout(): void {
-    this.http.post(`${this.authUrl}/logout`, {}).subscribe({});
     this.userService.setUser(null);
     this.router.navigate(['auth/login']);
   }

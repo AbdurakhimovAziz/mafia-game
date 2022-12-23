@@ -111,6 +111,7 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
 
   public heal(username: string): void {
     const currentPlayer = this.getPlayer();
+    this.isMe(username) && this.gameService.healMyself();
     currentPlayer &&
       this.socket.send<GameActionDTO>(SOCKET_EVENTS.GAME_ACTION, {
         player: username,
@@ -129,39 +130,40 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
     return this.gameService.isNightPhase();
   }
 
-  public canKill(): boolean {
+  public canKill(username: string): boolean {
     const role = this.getRole();
     return (
+      !this.isMe(username) &&
       this.isNightPhase() &&
-      this.gameService.isAlive() &&
       (role === GAME_ROLE_NAMES.MAFIA ||
         role === GAME_ROLE_NAMES.DETECTIVE ||
         role === GAME_ROLE_NAMES.DON)
     );
   }
 
-  public canHeal(): boolean {
+  public canHeal(username: string): boolean {
     return (
-      this.isNightPhase() &&
-      this.gameService.isAlive() &&
-      this.getRole() === 'doctor'
+      (this.isNightPhase() &&
+        this.isMe(username) &&
+        this.getRole() === 'doctor' &&
+        !this.gameService.isHealedMyself()) ||
+      (this.isNightPhase() && this.getRole() === 'doctor')
     );
   }
 
-  public canCheck(): boolean {
+  public canCheck(username: string): boolean {
     return (
+      !this.isMe(username) &&
       this.isNightPhase() &&
-      this.gameService.isAlive() &&
       this.getRole() === 'detective'
     );
   }
 
-  public canVote(): boolean {
-    return this.isDayPhase() && this.gameService.isAlive();
+  public canVote(username: string): boolean {
+    return !this.isMe(username) && this.isDayPhase();
   }
 
   public isMe(username: string): boolean {
-    console.log(username, this.gameService.getPlayer()?.username);
     return this.getPlayer()?.username === username;
   }
 
@@ -184,5 +186,9 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
 
   public getRole(): string {
     return this.gameService.getPlayer()?.role || '';
+  }
+
+  public amIAlive(): boolean {
+    return this.gameService.amIAlive();
   }
 }

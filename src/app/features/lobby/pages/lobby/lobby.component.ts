@@ -57,7 +57,11 @@ export class LobbyComponent
         .on<LobbyJoinedResponse>(SOCKET_EVENTS.JOINED_LOBBY)
         .subscribe((response) => {
           this.zone.run(() => {
-            response.data && this.lobbyService.addPlayerToLobby(response.data!);
+            response.data &&
+              this.lobbyService.addPlayerToLobby({
+                ...response.data!,
+                isAlive: true
+              });
           });
         })
     );

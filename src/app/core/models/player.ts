@@ -3,5 +3,5 @@ import { IUser } from './user';
 
 export interface Player extends Omit<IUser, 'password' | 'email'> {
   role?: PlayerRoles;
-  isAlive?: boolean;
+  isAlive: boolean;
 }

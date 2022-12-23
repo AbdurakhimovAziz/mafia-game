@@ -3,7 +3,7 @@ import { BehaviorSubject, timer } from 'rxjs';
 import { GAME_STATUS, PhaseTimes, SOCKET_EVENTS } from '../../constants';
 import { ILobby, Player } from '../../models';
 import { GamePhases, PlayerRoles } from '../../utils';
-import { LobbyService } from '../lobby/lobby.service';
+import { LobbyService } from '../lobby';
 import { SocketService } from '../socket';
 
 @Injectable({
@@ -13,13 +13,14 @@ export class GameService {
   public gameStatus: GAME_STATUS = GAME_STATUS.WAITING;
   private gamePhase = new BehaviorSubject<GamePhases>('day');
   public gamePhase$ = this.gamePhase.asObservable();
+  private healedMyself = false;
   private isDiscussionPhaseSubject = new BehaviorSubject<boolean>(false);
   public isDiscussionPhase$ = this.isDiscussionPhaseSubject.asObservable();
 
   private player: Player | null = {
     id: '123',
     username: 'example',
-    role: 'detective',
+    role: 'mafia',
     isAlive: true
   };
 
@@ -37,7 +38,7 @@ export class GameService {
           timer(PhaseTimes.VOTING).subscribe(() => {
             this.setGamePhase('night');
 
-            this.isHost() &&
+            this.amIHost() &&
               this.socket.send<string>(
                 SOCKET_EVENTS.GAME_VOTE_RESULT,
                 this.getLobbyId()
@@ -51,7 +52,7 @@ export class GameService {
           this.setGamePhase('day');
           this.isDiscussionPhaseSubject.next(true);
 
-          this.isHost() &&
+          this.amIHost() &&
             this.socket.send<string>(
               SOCKET_EVENTS.GAME_ACTION_RESULT,
               this.getLobbyId()
@@ -61,7 +62,7 @@ export class GameService {
     });
   }
 
-  public isHost(): boolean {
+  public amIHost(): boolean {
     return this.getLobby()?.host === this.player?.username;
   }
 
@@ -85,7 +86,8 @@ export class GameService {
     this.socket.connect();
   }
 
-  public isAlive(): boolean {
+  public amIAlive(): boolean {
+    console.log(this.player?.isAlive);
     return this.player?.isAlive || false;
   }
 
@@ -111,5 +113,13 @@ export class GameService {
 
   public getLobbyId(): string {
     return this.getLobby()?.id || '';
+  }
+
+  public healMyself() {
+    this.healedMyself = true;
+  }
+
+  public isHealedMyself() {
+    return this.healedMyself;
   }
 }

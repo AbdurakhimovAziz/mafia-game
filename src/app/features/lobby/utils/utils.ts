@@ -6,31 +6,38 @@ export const mockLobby: ILobby = {
   players: [
     {
       id: '123',
-      username: 'player 1'
+      username: 'player 1',
+      isAlive: true
     },
     {
       id: '123',
-      username: 'player 2'
+      username: 'player 2',
+      isAlive: true
     },
     {
       id: '123',
-      username: 'player 3'
+      username: 'player 3',
+      isAlive: true
     },
     {
       id: '123',
-      username: 'example'
+      username: 'example',
+      isAlive: true
     },
     {
       id: '123',
-      username: 'player 4'
+      username: 'player 4',
+      isAlive: true
     },
     {
       id: '123',
-      username: 'player 5'
+      username: 'player 5',
+      isAlive: true
     },
     {
       id: '123',
-      username: 'player 6'
+      username: 'player 6',
+      isAlive: true
     }
   ],
   host: 'example',
