@@ -15,7 +15,6 @@ import {
   VoteResponse,
   VoteResultResponse
 } from '../../../../core';
-import { mockLobby } from '../../../lobby/utils';
 
 @Component({
   selector: 'app-game',
@@ -69,7 +68,7 @@ export class GameComponent extends SubscriptionDestroyer implements OnInit {
     );
 
     // TODO: remove
-    this.lobbyService.setCurrentLobby(mockLobby);
+    // this.lobbyService.setCurrentLobby(mockLobby);
     console.log(this.lobbyService.getCurrentLobby());
     // this.gameService.revealAllyRoles();
   }

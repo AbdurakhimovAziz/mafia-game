@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleSocketDisconnect = exports.handleSocketSend = exports.handleSocketConnect = void 0;
-var costants_1 = require("./costants");
 var net = require("net");
+var costants_1 = require("./costants");
 var socket;
 var handleSocketConnect = function (e, mainWindow) {
     socket = new net.Socket();
@@ -15,8 +15,10 @@ var handleSocketConnect = function (e, mainWindow) {
         mainWindow.webContents.send(costants_1.IPC_MESSAGES.SOCKET_ERROR, err);
     });
     socket.on('data', function (data) {
+        var message = data.toString();
         console.log('received data from socket', data.toString());
-        mainWindow.webContents.send(costants_1.IPC_MESSAGES.SOCKET_DATA, data);
+        var splitMessage = message.split('\0');
+        mainWindow.webContents.send(costants_1.IPC_MESSAGES.SOCKET_DATA, splitMessage[0]);
     });
     return 'connected';
 };

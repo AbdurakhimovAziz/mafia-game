@@ -13,7 +13,6 @@ import {
   SubscriptionDestroyer,
   UserService
 } from '../../../../core';
-import { mockLobby } from '../../utils';
 
 @Component({
   selector: 'app-lobby',
@@ -101,8 +100,8 @@ export class LobbyComponent
       !this.lobbyService.getCurrentLobby() &&
       this.lobbyService.joinLobby(this.lobbyId);
 
-    !this.lobbyService.getCurrentLobby() &&
-      this.lobbyService.setCurrentLobby(mockLobby); // TODO: remove
+    // !this.lobbyService.getCurrentLobby() &&
+    //   this.lobbyService.setCurrentLobby(mockLobby); // TODO: remove
   }
 
   public isHost(username: string): boolean {

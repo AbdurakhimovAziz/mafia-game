@@ -1,6 +1,5 @@
-import { IPC_MESSAGES, SOCKET } from './costants';
-
 import * as net from 'net';
+import { IPC_MESSAGES, SOCKET } from './costants';
 
 let socket;
 
@@ -15,8 +14,10 @@ export const handleSocketConnect = (e, mainWindow) => {
     mainWindow.webContents.send(IPC_MESSAGES.SOCKET_ERROR, err);
   });
   socket.on('data', (data) => {
+    const message = data.toString();
     console.log('received data from socket', data.toString());
-    mainWindow.webContents.send(IPC_MESSAGES.SOCKET_DATA, data);
+    const splitMessage = message.split('\0');
+    mainWindow.webContents.send(IPC_MESSAGES.SOCKET_DATA, splitMessage[0]);
   });
   return 'connected';
 };

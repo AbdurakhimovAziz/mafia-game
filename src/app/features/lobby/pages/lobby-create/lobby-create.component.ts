@@ -9,7 +9,7 @@ import {
   SubscriptionDestroyer,
   UserService
 } from '../../../../core';
-import { LobbyForm, mockLobby } from '../../utils';
+import { LobbyForm } from '../../utils';
 
 @Component({
   selector: 'app-lobby-create',
@@ -43,7 +43,15 @@ export class LobbyCreateComponent
         .on<LobbyCreateResponse>(SOCKET_EVENTS.CREATE_LOBBY)
         .subscribe((res) => {
           this.zone.run(() => {
-            this.lobbyService.setCurrentLobby(res.data!);
+            this.lobbyService.setCurrentLobby({
+              ...res.data!,
+              players: [
+                {
+                  ...this.user.getUser()!,
+                  isAlive: true
+                }
+              ]
+            });
             this.router.navigate(['play', res.data?.id]);
           });
         })
@@ -55,13 +63,13 @@ export class LobbyCreateComponent
     this.lobbyService.createLobby(this.lobbyForm.getRawValue().name);
 
     // TODO: Remove this mock lobby
-    const lobby = {
-      ...mockLobby,
-      name: this.lobbyForm.getRawValue().name,
-      host: user.username
-    };
-    this.lobbyService.setCurrentLobby(lobby);
-    this.router.navigate(['play', lobby.id]);
+    // const lobby = {
+    //   ...mockLobby,
+    //   name: this.lobbyForm.getRawValue().name,
+    //   host: user.username
+    // };
+    // this.lobbyService.setCurrentLobby(lobby);
+    // this.router.navigate(['play', lobby.id]);
 
     this.lobbyForm.reset();
   }
